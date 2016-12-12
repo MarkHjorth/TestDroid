@@ -70,7 +70,7 @@ namespace TestDroid
 
 					switch (command)
 					{
-						case "SendSMS":
+						case "sendSMS":
 							controller.SendSMS();
 							break;
 

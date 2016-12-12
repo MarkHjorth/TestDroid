@@ -4,28 +4,18 @@ namespace TestDroid
 {
 	public class Controller
 	{
-		private SmsManager smsManager;
+		private SMS sms;
 
 		public Controller()
 		{
 			
 		}
 
-		public bool SendSMS(string text = "Bush Did 9/11")
+		public bool SendSMS(string text = "Harambe did 9/11", string phoneNumber = "41618934")
 		{
-			bool succes = false;
-			string phoneNumber = "41618934";
-
-
-			try
-			{
-				smsManager = SmsManager.Default;
-				smsManager.SendTextMessage(phoneNumber, null, text, null, null);
-			}
-			catch
-			{ 
-			}
-
+			sms = SMS.GetInstance();
+			return sms.SendSMS(text, phoneNumber);
+				
 		}
 	}
 }
