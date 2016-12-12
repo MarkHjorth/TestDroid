@@ -18,32 +18,40 @@ namespace TestDroidClient
 		{
 			int remotePort = 9001;
 			int localPort = 9001;
-			PortForward(remotePort, localPort);
-			InitClient(remotePort);
+
+            bool forwarded = PortForward(remotePort, localPort);
+            if (!forwarded)
+            {
+                Console.WriteLine("Not forw");
+                throw new Exception();
+            }
+            Console.WriteLine("forw");
+            InitClient(remotePort);
 
 		}
 
-		private void PortForward(int remotePort, int localPort)
+		private bool PortForward(int remotePort, int localPort)
 		{
-			try
-			{
-				string path = "/Users/dina/Library/Developer/Xamarin/android-sdk-macosx/platform-tools/adb";
-				string parameters = string.Format("-d forward tcp:{0} tcp:{1}", remotePort, localPort);
-				Process.Start(path, parameters);
-				return;
-			}
-			catch
-			{ 
-			}
-			try
+            try
+            {
+                string path = "/Users/dina/Library/Developer/Xamarin/android-sdk-macosx/platform-tools/adb";
+                string parameters = string.Format("-d forward tcp:{0} tcp:{1}", remotePort, localPort);
+                Process.Start(path, parameters);
+            }
+            catch
+            {
+                return false;
+            }
+            try
 			{
 				string path = "C:/Program Files (x86)/Android/android-sdk/platform-tools/adb.exe";
 				string parameters = string.Format("-d Forward tcp:{0} tcp:{1}", remotePort, localPort);
 				Process.Start(path, parameters);
-				return;
+				return true;
 			}
 			catch
 			{
+                return false;
 			}
 		
 		}

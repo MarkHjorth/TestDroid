@@ -7,7 +7,14 @@ namespace TestDroidClient
 
 		public Controller()
 		{
-			tcpConnection = new TCPConnection();
+            try
+            {
+                tcpConnection = new TCPConnection();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("ADB not found!");
+            }
 		}
 
 		public void ParseCommand(string fullCommand)
