@@ -7,7 +7,14 @@ namespace TestDroidClient
 
 		public Controller()
 		{
-			tcpConnection = new TCPConnection();
+            try
+            {
+                tcpConnection = new TCPConnection();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("ADB not found!");
+            }
 		}
 
 		public void ParseCommand(string fullCommand)
@@ -16,9 +23,11 @@ namespace TestDroidClient
 			string command = args[0];
 			if (command == "sendSMS")
 			{
-				if (tcpConnection.SendCommand(fullCommand))
+                bool worked = tcpConnection.SendCommand(fullCommand);
+
+                if(!worked)
 				{
-					Console.WriteLine("Prolihøhar");
+					Console.WriteLine("Command not send!");
 				}
 			}
 			else
