@@ -63,27 +63,28 @@ namespace TestDroid
 			//Step 4: Read string data from client (command)
 			do
 			{
-				
+
 				try
 				{
 					command = reader.ReadString();
 
 					switch (command)
 					{
-						case "Send SMS":
+						case "SendSMS":
 							controller.SendSMS();
 							break;
-							
+
 						default:
-							break;	
+							break;
 					}
 				}
 
-				catch 
+				catch
 				{
-				
+
 				}
 			}
+			while (command != "stop");
 		}
 
 	}
