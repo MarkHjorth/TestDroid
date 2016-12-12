@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDroid", "TestDroid\Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDroid.UITests", "TestDroid.UITests\TestDroid.UITests.csproj", "{472EEAA9-ED86-4C91-A3F0-928E700A9221}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDroidClient", "TestDroidClient\TestDroidClient.csproj", "{C531D332-F34C-4282-B3B6-F03575632742}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,5 +21,9 @@ Global
 		{472EEAA9-ED86-4C91-A3F0-928E700A9221}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{472EEAA9-ED86-4C91-A3F0-928E700A9221}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{472EEAA9-ED86-4C91-A3F0-928E700A9221}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C531D332-F34C-4282-B3B6-F03575632742}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C531D332-F34C-4282-B3B6-F03575632742}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C531D332-F34C-4282-B3B6-F03575632742}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C531D332-F34C-4282-B3B6-F03575632742}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
