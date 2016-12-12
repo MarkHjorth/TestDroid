@@ -1,13 +1,13 @@
 ﻿using Android.App;
 using Android.Widget;
 using Android.OS;
+using System.Threading;
 
 namespace TestDroid
 {
 	[Activity(Label = "TestDroid", MainLauncher = true, Icon = "@mipmap/icon")]
 	public class MainActivity : Activity
 	{
-		int count = 1;
 
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
@@ -16,12 +16,27 @@ namespace TestDroid
 			// Set our view from the "main" layout resource
 			SetContentView(Resource.Layout.Main);
 
-			// Get our button from the layout resource,
-			// and attach an event to it
-			Button button = FindViewById<Button>(Resource.Id.myButton);
+			FindViews();
+			AddHandlers();
 
-			button.Click += delegate { button.Text = string.Format("{0} clicks!", count++); };
+			ThreadStart serverThreadStart = new ThreadStart(StartServer);
+			Thread serverThread = new Thread(serverThreadStart);
+			serverThread.Start();
+ 
+		}
+		private void FindViews()
+		{ 
+		}
+
+		private void AddHandlers()
+		{
+		}
+
+		private void StartServer()
+		{
+			TCPserver tcpServer = new TCPserver();
 		}
 	}
+
 }
 
