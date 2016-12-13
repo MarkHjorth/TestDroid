@@ -5,15 +5,17 @@ namespace TestDroidClient
 	{
 		TCPConnection tcpConnection;
 
-		public Controller()
+		public Controller(string[] args)
 		{
+			string command = string.Join(" ", args);
             try
             {
                 tcpConnection = new TCPConnection();
+				ParseCommand(command);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                Console.WriteLine("ADB not found!");
+				Console.WriteLine(e.StackTrace);
             }
 		}
 
@@ -21,18 +23,25 @@ namespace TestDroidClient
 		{
 			string[] args = fullCommand.Split(' ');
 			string command = args[0];
-			if (command == "sendSMS")
+			try
 			{
-                bool worked = tcpConnection.SendCommand(fullCommand);
-
-                if(!worked)
+				if (command == "sendSMS")
 				{
-					Console.WriteLine("Command not send!");
+					bool worked = tcpConnection.SendCommand(fullCommand);
+
+					if (!worked)
+					{
+						Console.WriteLine("Command not send!");
+					}
+				}
+				else
+				{
+					Console.WriteLine("Command not found!");
 				}
 			}
-			else
+			catch (Exception e)
 			{
-				Console.WriteLine("Command not found!");
+				Console.WriteLine(e.StackTrace);
 			}
 		}
 	}

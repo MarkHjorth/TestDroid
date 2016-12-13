@@ -6,7 +6,7 @@ namespace TestDroidClient
 	{
 		public static void Main(string[] args)
 		{
-			Controller ctrl = new Controller();
+			Controller ctrl = new Controller(args);
             do
             {
                 ctrl.ParseCommand(Console.ReadLine());

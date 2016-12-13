@@ -38,8 +38,9 @@ namespace TestDroidClient
                 string parameters = string.Format("-d forward tcp:{0} tcp:{1}", remotePort, localPort);
                 Process.Start(path, parameters);
             }
-            catch
+			catch(Exception e)
             {
+				throw e;
             }
             try
 			{
@@ -48,9 +49,9 @@ namespace TestDroidClient
 				Process.Start(path, parameters);
 				return true;
 			}
-			catch
+			catch(Exception e)
 			{
-                return false;
+				throw e;
 			}
 		
 		}
@@ -76,8 +77,9 @@ namespace TestDroidClient
 				Console.WriteLine("Got IO Streams");
 
 			}
-			catch
-			{ 
+			catch(Exception e)
+			{
+				throw e;
 			}
 
 			do
@@ -87,8 +89,9 @@ namespace TestDroidClient
 					message = reader.ReadString();
 					Console.WriteLine(message);
 				}
-				catch
+				catch(Exception e)
 				{
+					throw e;
 				}
 
 			}
@@ -100,9 +103,9 @@ namespace TestDroidClient
 				output.Close();
 				client.Close();
 			}
-			catch
-			{ 
-			
+			catch(Exception e)
+			{
+				throw e;
 			}
 
 		}
@@ -114,9 +117,9 @@ namespace TestDroidClient
 				writer.Write(command);
 				return true;
 			}
-			catch
+			catch(Exception e)
 			{
-				return false;
+				throw e;
 			}
 		}
 	}

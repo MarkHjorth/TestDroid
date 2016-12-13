@@ -32,7 +32,7 @@ namespace TestDroid
 				controller = new Controller();
 			}
 
-			catch(Exception error)
+			catch(Exception e)
 			{
 				int i = 0;
 			}
