@@ -13,24 +13,27 @@ namespace TestDroidClient
 		private BinaryReader reader;
 		private TcpClient client;
 
+        public bool GotIO { get; set; }
 
-		public TCPConnection()
+        public TCPConnection()
 		{
+            GotIO = false;
 			int remotePort = 9001;
 			int localPort = 9001;
 
-            bool forwarded = PortForward(remotePort, localPort);
-            if (!forwarded)
+            try
             {
-                Console.WriteLine("Not forw");
-                throw new Exception();
+                PortForward(remotePort, localPort);
+                InitClient(remotePort);
             }
-            Console.WriteLine("forw");
-            InitClient(remotePort);
+            catch (Exception e)
+            {
+                throw e;
+            }
 
 		}
 
-		private bool PortForward(int remotePort, int localPort)
+		private void PortForward(int remotePort, int localPort)
 		{
             try
             {
@@ -40,26 +43,32 @@ namespace TestDroidClient
             }
 			catch(Exception e)
             {
-				throw e;
+				//throw e;
             }
             try
 			{
 				string path = "C:/Program Files (x86)/Android/android-sdk/platform-tools/adb.exe";
-				string parameters = string.Format("-d Forward tcp:{0} tcp:{1}", remotePort, localPort);
+				string parameters = string.Format("-d forward tcp:{0} tcp:{1}", remotePort, localPort);
 				Process.Start(path, parameters);
-				return true;
 			}
 			catch(Exception e)
 			{
 				throw e;
 			}
-		
+            Console.WriteLine("Port forwarded");
 		}
 
 		private void InitClient(int remotePort)
 		{
-			Thread readThread = new Thread(() => RunClient(remotePort));
-			readThread.Start();
+            try
+            {
+                Thread readThread = new Thread(() => RunClient(remotePort));
+                readThread.Start();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
 
 		}
 
@@ -75,11 +84,11 @@ namespace TestDroidClient
 				writer = new BinaryWriter(output);
 				reader = new BinaryReader(output);
 				Console.WriteLine("Got IO Streams");
-
+                GotIO = true;
 			}
 			catch(Exception e)
 			{
-				throw e;
+                Console.WriteLine(e.StackTrace);
 			}
 
 			do
@@ -115,6 +124,7 @@ namespace TestDroidClient
 			try
 			{
 				writer.Write(command);
+                Console.WriteLine("Command: '" + command + "' sent to server");
 				return true;
 			}
 			catch(Exception e)

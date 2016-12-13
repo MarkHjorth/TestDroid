@@ -7,11 +7,18 @@ namespace TestDroidClient
 
 		public Controller(string[] args)
 		{
-			string command = string.Join(" ", args);
             try
             {
                 tcpConnection = new TCPConnection();
-				ParseCommand(command);
+
+                while(!tcpConnection.GotIO)
+                { }
+
+                if (args.Length >= 1)
+                {
+                    string command = string.Join(" ", args);
+                    ParseCommand(command);
+                }
             }
             catch (Exception e)
             {
