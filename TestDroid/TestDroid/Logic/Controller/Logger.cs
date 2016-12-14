@@ -74,7 +74,7 @@ namespace TestDroid.Logic.Controller
 
             try
             {
-                logAdapter.Add(logMessage);
+                RunOnUiThread(() => logAdapter.Add(logMessage));
             }
             catch (Exception)
             {
