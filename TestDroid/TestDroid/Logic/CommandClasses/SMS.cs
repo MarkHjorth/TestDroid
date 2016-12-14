@@ -86,14 +86,15 @@ namespace TestDroid
 
             if (countBefore < countAfter)
             {
+                logger.LogEvent("SMS sent");
                 succes = true;
             }
             else
             {
+                logger.LogEvent("SMS not sent. Check Sim card maybe", 2);
                 succes = false;
             }
 			return succes;
 		}
-
 	}
 }

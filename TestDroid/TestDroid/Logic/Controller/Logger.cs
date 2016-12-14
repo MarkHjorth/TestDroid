@@ -12,7 +12,7 @@ using Android.Widget;
 
 namespace TestDroid.Logic.Controller
 {
-    class Logger
+    class Logger : Activity
     {
         private static Logger instance;
         private ArrayAdapter logAdapter;
