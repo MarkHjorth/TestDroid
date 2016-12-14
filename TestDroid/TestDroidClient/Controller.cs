@@ -4,12 +4,14 @@ namespace TestDroidClient
 	public class Controller
 	{
 		TCPConnection tcpConnection;
+		private Flightmode flightmode;
 
 		public Controller()
 		{
             try
             {
                 tcpConnection = new TCPConnection();
+				flightmode = new Flightmode();
             }
             catch (Exception)
             {
@@ -21,16 +23,21 @@ namespace TestDroidClient
 		{
 			string[] args = fullCommand.Split(' ');
 			string command = args[0];
-			if (command == "sendSMS")
+
+			switch (command)
 			{
-				if (tcpConnection.SendCommand(fullCommand))
-				{
-					Console.WriteLine("Prolihøhar");
-				}
-			}
-			else
-			{
-				Console.WriteLine("Command not found!");
+				case "sendSMS":
+					if (tcpConnection.SendCommand(fullCommand))
+					{
+						Console.WriteLine("Prolihøhar");
+					}
+					break;
+				case "flightmode":
+					flightmode.HandleFlightmode(args);
+				break;
+				default:
+					Console.WriteLine("Command not found!");
+					break;
 			}
 		}
 	}
