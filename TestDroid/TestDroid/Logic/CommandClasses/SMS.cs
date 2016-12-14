@@ -3,6 +3,7 @@ using Android.Telephony;
 using Android.Provider;
 using Android.Database;
 using Android.Content;
+using TestDroid.Logic.Controller;
 
 namespace TestDroid
 {
@@ -14,15 +15,22 @@ namespace TestDroid
 
         private static SMS instance;
         private static Context context;
+        
+        Logger logger;
 
         private SMS(Context cont)
 		{
 			smsManager = SmsManager.Default;
             context = cont;
+            logger = Logger.GetInstance();
 		}
 
-		//Calls and returns the only possible instance of SMS
-		public static SMS GetInstance(Context c)
+        /// <summary>
+        /// Calls and returns the only possible instance of SMS
+        /// </summary>
+        /// <param name="c">The Context</param>
+        /// <returns></returns>
+        public static SMS GetInstance(Context c)
 		{
 			if (instance == null)
 			{
@@ -31,6 +39,12 @@ namespace TestDroid
 			return instance;
 		}
 
+        /// <summary>
+        /// Sends an SMS
+        /// </summary>
+        /// <param name="text">The text (Body) of the SMS message</param>
+        /// <param name="phoneNumber">The phone number to send the SMS to</param>
+        /// <returns>True if the SMS is send</returns>
 		public bool SendSMS(string text, string phoneNumber)
 		{
 			bool succes = false;
@@ -45,17 +59,18 @@ namespace TestDroid
             }
             catch (Exception e)
             {
-                throw e;
+                logger.LogEvent(e.StackTrace, 3);
             }
 
             try
 			{
-				
+                logger.LogEvent("Sending SMS to: " + phoneNumber);
 				smsManager.SendTextMessage(phoneNumber, null, text, null, null);
 				succes = true;
 			}
 			catch
 			{
+                logger.LogEvent("SMS not sent", 2);
 				succes = false;
 			}
 
@@ -66,7 +81,7 @@ namespace TestDroid
             }
             catch (Exception e)
             {
-                throw e;
+                logger.LogEvent(e.StackTrace, 3);
             }
 
             if (countBefore < countAfter)

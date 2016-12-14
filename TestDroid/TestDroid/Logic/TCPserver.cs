@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.IO;
 using System.Net;
 using Android.Content;
+using TestDroid.Logic.Controller;
 
 namespace TestDroid
 {
@@ -14,12 +15,12 @@ namespace TestDroid
 		private BinaryReader reader;
 		private TcpListener listener;
 		private Controller controller;
+        private Logger logger;
 
 		public TCPserver(Context context)
 		{
 			InitServer(context);
 			StartServer();
-
 		}
 
 		private void InitServer(Context context)
@@ -31,10 +32,12 @@ namespace TestDroid
 				int port = 9001;
 				listener = new TcpListener(ip, port);
 				controller = new Controller(context);
+                logger = Logger.GetInstance();
 			}
 
 			catch(Exception e)
 			{
+                logger.LogEvent(e.StackTrace, 3);
 				int i = 0;
 			}
 		}
@@ -79,9 +82,9 @@ namespace TestDroid
 							break;
 					}
 				}
-				catch
+				catch (Exception e)
 				{
-
+                    logger.LogEvent(e.StackTrace, 3);
 				}
 			}
 			while (command != "stop");
