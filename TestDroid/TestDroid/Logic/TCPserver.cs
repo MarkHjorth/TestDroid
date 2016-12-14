@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.IO;
 using System.Net;
+using Android.Content;
 
 namespace TestDroid
 {
@@ -14,14 +15,14 @@ namespace TestDroid
 		private TcpListener listener;
 		private Controller controller;
 
-		public TCPserver()
+		public TCPserver(Context context)
 		{
-			InitServer();
+			InitServer(context);
 			StartServer();
 
 		}
 
-		private void InitServer()
+		private void InitServer(Context context)
 		{
 			try
 			{
@@ -29,7 +30,7 @@ namespace TestDroid
 				IPAddress ip = new IPAddress(16777343);
 				int port = 9001;
 				listener = new TcpListener(ip, port);
-				controller = new Controller();
+				controller = new Controller(context);
 			}
 
 			catch(Exception e)
@@ -78,7 +79,6 @@ namespace TestDroid
 							break;
 					}
 				}
-
 				catch
 				{
 

@@ -2,6 +2,7 @@
 using Android.Widget;
 using Android.OS;
 using System.Threading;
+using Android.Content;
 
 namespace TestDroid
 {
@@ -22,10 +23,12 @@ namespace TestDroid
 			ThreadStart serverThreadStart = new ThreadStart(StartServer);
 			Thread serverThread = new Thread(serverThreadStart);
 			serverThread.Start();
- 
+
+            Context c = this;
 		}
 		private void FindViews()
 		{ 
+
 		}
 
 		private void AddHandlers()
@@ -34,7 +37,7 @@ namespace TestDroid
 
 		private void StartServer()
 		{
-			TCPserver tcpServer = new TCPserver();
+			TCPserver tcpServer = new TCPserver(this);
 		}
 	}
 
