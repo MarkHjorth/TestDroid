@@ -51,14 +51,12 @@ namespace TestDroid
 		public bool SendSMS(string text, string phoneNumber)
 		{
             int countBefore = 0;
-            int countAfter = 0;
 
             try
             {
                 uri = Telephony.Sms.ContentUri;
                 cursor = context.ContentResolver.Query(uri, null, "read = 1", null, null);
                 countBefore = cursor.Count;
-                logger.LogEvent(countBefore.ToString());
             }
             catch (Exception e)
             {
@@ -77,25 +75,14 @@ namespace TestDroid
                 TextSent = false;
 			}
 
-            try
-            {
-                cursor = context.ContentResolver.Query(uri, null, "read = 1", null, null);
-                countAfter = cursor.Count;
-                logger.LogEvent(countAfter.ToString());
-            }
-            catch (Exception e)
-            {
-                logger.LogEvent(e.StackTrace, 3);
-            }
-            Thread t = new Thread(new ThreadStart(CountSms));
+            Thread t = new Thread(new ThreadStart(() => CountSms(countBefore)));
             t.Start();
             t.Join();
 			return TextSent;
 		}
         
-        private void CountSms()
+        private void CountSms(int before)
         {
-            int before = 0;
             int after = 0;
             uri = Telephony.Sms.ContentUri;
             cursor = context.ContentResolver.Query(uri, null, "read = 1", null, null);
@@ -112,7 +99,10 @@ namespace TestDroid
                 logger.LogEvent("Text sent!");
                 TextSent = true;
             }
-            logger.LogEvent("Text not sent");
+            else
+            {
+                logger.LogEvent("Text not sent"); 
+            }
             TextSent = false;
         }
     }
