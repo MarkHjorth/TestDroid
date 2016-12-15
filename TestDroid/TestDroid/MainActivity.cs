@@ -2,14 +2,23 @@
 using Android.Widget;
 using Android.OS;
 using System.Threading;
+using Android.Content;
+using System.Collections.Generic;
+using TestDroid.Logic.Controller;
 
 namespace TestDroid
 {
 	[Activity(Label = "TestDroid", MainLauncher = true, Icon = "@mipmap/icon")]
 	public class MainActivity : Activity
 	{
+        ListView logList;
+        ArrayAdapter<string> arrayAdapter;
+        List<string> logs;
+        Logger logger;
 
-		protected override void OnCreate(Bundle savedInstanceState)
+        Context context;
+
+        protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
 
@@ -22,11 +31,20 @@ namespace TestDroid
 			ThreadStart serverThreadStart = new ThreadStart(StartServer);
 			Thread serverThread = new Thread(serverThreadStart);
 			serverThread.Start();
- 
 		}
+
 		private void FindViews()
-		{ 
-		}
+		{
+            logList = FindViewById<ListView>(Resource.Id.logList);
+
+            logs = new List<string>();
+            logs.Add("EVENTS:");
+            arrayAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, logs);
+            logList.Adapter = arrayAdapter;
+            logger = Logger.GetInstance(arrayAdapter);
+
+            context = Application.Context;
+        }
 
 		private void AddHandlers()
 		{
@@ -34,7 +52,7 @@ namespace TestDroid
 
 		private void StartServer()
 		{
-			TCPserver tcpServer = new TCPserver();
+			TCPserver tcpServer = new TCPserver(context);
 		}
 	}
 
