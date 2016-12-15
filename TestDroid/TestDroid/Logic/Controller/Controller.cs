@@ -8,9 +8,7 @@ namespace TestDroid
 	public class Controller
 	{
 		private SMS sms;
-        
         Context context;
-
         Logger logger;
 
 		public Controller(Context cont)

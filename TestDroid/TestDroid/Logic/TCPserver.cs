@@ -38,7 +38,6 @@ namespace TestDroid
 			catch(Exception e)
 			{
                 logger.LogEvent(e.StackTrace, 3);
-				int i = 0;
 			}
 		}
 
@@ -62,12 +61,10 @@ namespace TestDroid
 
 		private void ServerClientInteraction()
 		{
-
 			string command = "";
 			//Step 4: Read string data from client (command)
 			do
 			{
-
 				try
 				{
 					command = reader.ReadString();
@@ -89,6 +86,5 @@ namespace TestDroid
 			}
 			while (command != "stop");
 		}
-
 	}
 }

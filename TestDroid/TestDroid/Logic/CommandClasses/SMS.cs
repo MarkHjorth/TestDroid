@@ -4,6 +4,7 @@ using Android.Provider;
 using Android.Database;
 using Android.Content;
 using TestDroid.Logic.Controller;
+using System.Threading;
 
 namespace TestDroid
 {
@@ -24,6 +25,8 @@ namespace TestDroid
             context = cont;
             logger = Logger.GetInstance();
 		}
+
+        public bool TextSent { get; set; }
 
         /// <summary>
         /// Calls and returns the only possible instance of SMS
@@ -47,7 +50,6 @@ namespace TestDroid
         /// <returns>True if the SMS is send</returns>
 		public bool SendSMS(string text, string phoneNumber)
 		{
-			bool succes = false;
             int countBefore = 0;
             int countAfter = 0;
 
@@ -67,12 +69,12 @@ namespace TestDroid
 			{
                 logger.LogEvent("Sending SMS to: " + phoneNumber);
 				smsManager.SendTextMessage(phoneNumber, null, text, null, null);
-				succes = true;
+                TextSent = true;
 			}
 			catch(Exception e)
 			{
                 logger.LogEvent(e.StackTrace, 3);
-				succes = false;
+                TextSent = false;
 			}
 
             try
@@ -85,10 +87,10 @@ namespace TestDroid
             {
                 logger.LogEvent(e.StackTrace, 3);
             }
-
             Thread t = new Thread(new ThreadStart(CountSms));
             t.Start();
-			return succes;
+            t.Join();
+			return TextSent;
 		}
         
         private void CountSms()
@@ -100,21 +102,18 @@ namespace TestDroid
             before = cursor.Count;
             logger.LogEvent(before.ToString());
 
-            int i = 0;
-            while (i < 1000)
+            Thread.Sleep(2000);
+
+            uri = Telephony.Sms.ContentUri;
+            cursor = context.ContentResolver.Query(uri, null, "read = 1", null, null);
+            after = cursor.Count;
+            if (before != after)
             {
-                uri = Telephony.Sms.ContentUri;
-                cursor = context.ContentResolver.Query(uri, null, "read = 1", null, null);
-                after = cursor.Count;
-                if (before != after)
-                {
-                    i = 9001;
-                    logger.LogEvent("Text sent!");
-                    return;
-                }
-                i++;
+                logger.LogEvent("Text sent!");
+                TextSent = true;
             }
             logger.LogEvent("Text not sent");
+            TextSent = false;
         }
     }
 }
