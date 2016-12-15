@@ -87,7 +87,6 @@ namespace TestDroid
             uri = Telephony.Sms.ContentUri;
             cursor = context.ContentResolver.Query(uri, null, "read = 1", null, null);
             before = cursor.Count;
-            logger.LogEvent(before.ToString());
 
             Thread.Sleep(2000);
 
