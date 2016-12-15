@@ -32,6 +32,30 @@ namespace TestDroidClient
 		{
 			string[] args = fullCommand.Split(' ');
 			string command = args[0];
+<<<<<<< HEAD
+			try
+			{
+                switch (command)
+                {
+                    case "sendSMS":
+                        bool worked = tcpConnection.SendCommand(fullCommand);
+
+                        if (!worked)
+                        {
+                            Console.WriteLine("Command not send!");
+                        }
+                        break;
+                    case "installAPK":
+                        InstallApk();
+                        break;
+                    default:
+                        break;
+                }
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e.StackTrace);
+=======
 
 			switch (command)
 			{
@@ -47,6 +71,7 @@ namespace TestDroidClient
 				default:
 					Console.WriteLine("Command not found!");
 					break;
+>>>>>>> develop
 			}
 		}
 

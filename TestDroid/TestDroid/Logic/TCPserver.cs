@@ -2,6 +2,8 @@
 using System.Net.Sockets;
 using System.IO;
 using System.Net;
+using Android.Content;
+using TestDroid.Logic.Controller;
 
 namespace TestDroid
 {
@@ -13,15 +15,15 @@ namespace TestDroid
 		private BinaryReader reader;
 		private TcpListener listener;
 		private Controller controller;
+        private Logger logger;
 
-		public TCPserver()
+		public TCPserver(Context context)
 		{
-			InitServer();
+			InitServer(context);
 			StartServer();
-
 		}
 
-		private void InitServer()
+		private void InitServer(Context context)
 		{
 			try
 			{
@@ -29,12 +31,13 @@ namespace TestDroid
 				IPAddress ip = new IPAddress(16777343);
 				int port = 9001;
 				listener = new TcpListener(ip, port);
-				controller = new Controller();
+				controller = new Controller(context);
+                logger = Logger.GetInstance();
 			}
 
 			catch(Exception e)
 			{
-				int i = 0;
+                logger.LogEvent(e.StackTrace, 3);
 			}
 		}
 
@@ -58,12 +61,10 @@ namespace TestDroid
 
 		private void ServerClientInteraction()
 		{
-
 			string command = "";
 			//Step 4: Read string data from client (command)
 			do
 			{
-
 				try
 				{
 					command = reader.ReadString();
@@ -78,14 +79,12 @@ namespace TestDroid
 							break;
 					}
 				}
-
-				catch
+				catch (Exception e)
 				{
-
+                    logger.LogEvent(e.StackTrace, 3);
 				}
 			}
 			while (command != "stop");
 		}
-
 	}
 }

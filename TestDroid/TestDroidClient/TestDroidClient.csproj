@@ -35,6 +35,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="TCPConnection.cs" />
+    <Compile Include="Flightmode.cs" />
+    <Compile Include="ADBhandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ADB\" />
