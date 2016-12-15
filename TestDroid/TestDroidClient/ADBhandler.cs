@@ -45,19 +45,21 @@ namespace TestDroidClient
 			{
 				process = Process.Start(processStartInfo);
 				streamOutput = process.StandardOutput;
-				process.WaitForExit(5000);
+
+				process.WaitForExit(10000);
 				if (process.HasExited)
 				{
 					output = streamOutput.ReadToEnd();
 				}
 				else
 				{
+					Console.WriteLine("Operation timed out!");
 					output = failedOutput;
 				}
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex.Message);
+				Console.WriteLine("An exception occured: \n" + ex.Message);
 				output = failedOutput;
 			}
 
