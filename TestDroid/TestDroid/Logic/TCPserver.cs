@@ -61,6 +61,9 @@ namespace TestDroid
 
 		private void ServerClientInteraction()
 		{
+            writer.Write("Connection established!");
+            logger.LogEvent("Client connected!");
+
 			string command = "";
 			//Step 4: Read string data from client (command)
 			do
@@ -79,10 +82,16 @@ namespace TestDroid
 							break;
 					}
 				}
-				catch (Exception e)
+				catch (EndOfStreamException)
 				{
-                    logger.LogEvent(e.StackTrace, 3);
+                    logger.LogEvent("Connection lost");
+                    return;
 				}
+                catch(Exception e)
+                {
+                    logger.LogEvent(e.StackTrace);
+                    return;
+                }
 			}
 			while (command != "stop");
 		}
