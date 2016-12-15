@@ -41,18 +41,26 @@ namespace TestDroidClient
 			processStartInfo.RedirectStandardOutput = true;
 			processStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 			processStartInfo.UseShellExecute = false;
-
-			process = Process.Start(processStartInfo);
-			streamOutput = process.StandardOutput;
-			process.WaitForExit(5000);
-			if (process.HasExited)
+			try
 			{
-				output = streamOutput.ReadToEnd();
+				process = Process.Start(processStartInfo);
+				streamOutput = process.StandardOutput;
+				process.WaitForExit(5000);
+				if (process.HasExited)
+				{
+					output = streamOutput.ReadToEnd();
+				}
+				else
+				{
+					output = failedOutput;
+				}
 			}
-			else
+			catch (Exception ex)
 			{
+				Console.WriteLine(ex.Message);
 				output = failedOutput;
 			}
+
 
 			return output;
 		}
