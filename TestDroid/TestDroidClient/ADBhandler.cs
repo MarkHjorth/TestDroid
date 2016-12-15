@@ -21,7 +21,8 @@ namespace TestDroidClient
 			// Test if the Windows path excists, else it should use mac path:
 			if (!File.Exists(path))
 			{
-				path = "/Users/mark/Library/Developer/Xamarin/android-sdk-macosx/platform-tools/adb";
+				string userName = Environment.UserName;
+				path = string.Format("/Users/{0}/Library/Developer/Xamarin/android-sdk-macosx/platform-tools/adb", userName);
 			}
 		}
 
