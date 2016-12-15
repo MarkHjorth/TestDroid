@@ -53,9 +53,10 @@ namespace TestDroid
 
             try
             {
-                uri = Telephony.Sms.Inbox.ContentUri;
+                uri = Telephony.Sms.ContentUri;
                 cursor = context.ContentResolver.Query(uri, null, "read = 1", null, null);
                 countBefore = cursor.Count;
+                logger.LogEvent(countBefore.ToString());
             }
             catch (Exception e)
             {
@@ -68,9 +69,9 @@ namespace TestDroid
 				smsManager.SendTextMessage(phoneNumber, null, text, null, null);
 				succes = true;
 			}
-			catch
+			catch(Exception e)
 			{
-                logger.LogEvent("SMS not sent", 2);
+                logger.LogEvent(e.StackTrace, 3);
 				succes = false;
 			}
 
@@ -78,23 +79,42 @@ namespace TestDroid
             {
                 cursor = context.ContentResolver.Query(uri, null, "read = 1", null, null);
                 countAfter = cursor.Count;
+                logger.LogEvent(countAfter.ToString());
             }
             catch (Exception e)
             {
                 logger.LogEvent(e.StackTrace, 3);
             }
 
-            if (countBefore < countAfter)
-            {
-                logger.LogEvent("SMS sent");
-                succes = true;
-            }
-            else
-            {
-                logger.LogEvent("SMS not sent. Check Sim card maybe", 2);
-                succes = false;
-            }
+            Thread t = new Thread(new ThreadStart(CountSms));
+            t.Start();
 			return succes;
 		}
-	}
+        
+        private void CountSms()
+        {
+            int before = 0;
+            int after = 0;
+            uri = Telephony.Sms.ContentUri;
+            cursor = context.ContentResolver.Query(uri, null, "read = 1", null, null);
+            before = cursor.Count;
+            logger.LogEvent(before.ToString());
+
+            int i = 0;
+            while (i < 1000)
+            {
+                uri = Telephony.Sms.ContentUri;
+                cursor = context.ContentResolver.Query(uri, null, "read = 1", null, null);
+                after = cursor.Count;
+                if (before != after)
+                {
+                    i = 9001;
+                    logger.LogEvent("Text sent!");
+                    return;
+                }
+                i++;
+            }
+            logger.LogEvent("Text not sent");
+        }
+    }
 }
