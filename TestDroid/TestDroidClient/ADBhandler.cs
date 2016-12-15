@@ -47,7 +47,7 @@ namespace TestDroidClient
 				process = Process.Start(processStartInfo);
 				streamOutput = process.StandardOutput;
 
-				process.WaitForExit(10000);
+				process.WaitForExit(30000);
 				if (process.HasExited)
 				{
 					output = streamOutput.ReadToEnd();
@@ -65,7 +65,7 @@ namespace TestDroidClient
 			}
 
 
-			return output;
+            return output;
 		}
 	}
 }

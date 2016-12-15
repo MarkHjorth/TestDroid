@@ -5,16 +5,14 @@ namespace TestDroidClient
 	{
 		TCPConnection tcpConnection;
 		private Flightmode flightmode;
+        private ApkInstaller apk;
 
 		public Controller(string[] args)
 		{
             try
             {
-                tcpConnection = new TCPConnection();
 				flightmode = new Flightmode();
-
-                while(!tcpConnection.GotIO)
-                { }
+                apk = new ApkInstaller();
 
                 if (args.Length >= 1)
                 {
@@ -36,27 +34,22 @@ namespace TestDroidClient
 			switch (command)
 			{
 				case "sendSMS":
-					if (tcpConnection.SendCommand(fullCommand))
+                    tcpConnection = new TCPConnection();
+                    if (tcpConnection.SendCommand(fullCommand))
 					{
 						Console.WriteLine("Prolihøhar");
 					}
 					break;
 				case "flightmode":
 					flightmode.HandleFlightmode(args);
-				break;
+                    break;
+                case "installApk":
+                    apk.InstallApk();
+				    break;
 				default:
 					Console.WriteLine("Command not found!");
 					break;
 			}
 		}
-
-        private bool InstallApk()
-        {
-            string adbPath = "C:/Program Files (x86)/Android/android-sdk/platform-tools/adb.exe";
-            string apkName = "com.rohde_schwarz.testdroid.apk";
-
-            ApkInstaller installer = new ApkInstaller();
-            return installer.InstallApk(adbPath, apkName);
-        }
 	}
 }
