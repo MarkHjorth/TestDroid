@@ -35,10 +35,7 @@ namespace TestDroidClient
 			{
 				case "sendSMS": //Other cases here
                     tcpConnection = new TCPConnection();
-                    if (tcpConnection.SendCommand(fullCommand))
-					{
-						Console.WriteLine("Prolihøhar");
-					}
+                    tcpConnection.SendCommand(fullCommand);
 					break;
 				case "flightmode":
 					flightmode.HandleFlightmode(args);
