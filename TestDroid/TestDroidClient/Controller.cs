@@ -5,15 +5,14 @@ namespace TestDroidClient
 	{
 		TCPConnection tcpConnection;
 		private Flightmode flightmode;
+        private ApkInstaller apk;
 
 		public Controller(string[] args)
 		{
             try
             {
 				flightmode = new Flightmode();
-
-                while(!tcpConnection.GotIO)
-                { }
+                apk = new ApkInstaller();
 
                 if (args.Length >= 1)
                 {
@@ -43,7 +42,10 @@ namespace TestDroidClient
 					break;
 				case "flightmode":
 					flightmode.HandleFlightmode(args);
-				break;
+                    break;
+                case "installApk":
+                    apk.InstallApk();
+				    break;
 				default:
 					Console.WriteLine("Command not found!");
 					break;

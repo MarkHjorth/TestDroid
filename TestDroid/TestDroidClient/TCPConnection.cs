@@ -12,11 +12,13 @@ namespace TestDroidClient
 		private BinaryWriter writer;
 		private BinaryReader reader;
 		private TcpClient client;
+        private ADBhandler adb;
 
         public bool GotIO { get; set; }
 
         public TCPConnection()
 		{
+            adb = new ADBhandler();
             GotIO = false;
 			int remotePort = 9001;
 			int localPort = 9001;
@@ -37,24 +39,13 @@ namespace TestDroidClient
 		{
             try
             {
-                string path = "/Users/dina/Library/Developer/Xamarin/android-sdk-macosx/platform-tools/adb";
                 string parameters = string.Format("-d forward tcp:{0} tcp:{1}", remotePort, localPort);
-                Process.Start(path, parameters);
+                adb.startProcess(parameters);
             }
 			catch(Exception e)
             {
-				//throw e;
-            }
-            try
-			{
-				string path = "C:/Program Files (x86)/Android/android-sdk/platform-tools/adb.exe";
-				string parameters = string.Format("-d forward tcp:{0} tcp:{1}", remotePort, localPort);
-				Process.Start(path, parameters);
-			}
-			catch(Exception e)
-			{
 				throw e;
-			}
+            }
             Console.WriteLine("Port forwarded");
 		}
 
@@ -69,7 +60,6 @@ namespace TestDroidClient
             {
                 throw e;
             }
-
 		}
 
 		private void RunClient(int port)

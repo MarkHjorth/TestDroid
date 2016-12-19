@@ -29,8 +29,10 @@ namespace TestDroidClient
 		/// <summary>
 		/// Sends an ADB command with the given arguments, and returns output as string.
 		/// </summary>
+		/// <returns>The process.</returns>
 		/// <param name="arguments">ADB commandline arguments.</param>
-		public string startProcess(string arguments)
+		/// <param name="verbose">If set to <c>true</c> verbose.</param>
+		public string startProcess(string arguments, bool verbose = false)
 		{
 			ProcessStartInfo processStartInfo = new ProcessStartInfo(path, arguments);
 			Process process = new Process();
@@ -39,18 +41,22 @@ namespace TestDroidClient
 			string failedOutput = "Failed...";
 
 			// Redirect output from execution
-			processStartInfo.RedirectStandardOutput = true;
-			processStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-			processStartInfo.UseShellExecute = false;
+			if (!verbose)
+			{
+				processStartInfo.RedirectStandardOutput = true;
+				processStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+				processStartInfo.UseShellExecute = false;
+			}
 			try
 			{
 				process = Process.Start(processStartInfo);
-				streamOutput = process.StandardOutput;
 
-				process.WaitForExit(10000);
+				streamOutput = (!verbose) ? process.StandardOutput : null;
+
+				process.WaitForExit(30000);
 				if (process.HasExited)
 				{
-					output = streamOutput.ReadToEnd();
+					output = (streamOutput == null) ? "Verbose enabled" : streamOutput.ReadToEnd();
 				}
 				else
 				{
@@ -65,7 +71,7 @@ namespace TestDroidClient
 			}
 
 
-			return output;
+            return output;
 		}
 	}
 }
