@@ -24,7 +24,7 @@ namespace TestDroidClient
             try
             {
                 string parameters = string.Format("-d install {0}", apkName);
-                Console.WriteLine(adb.startProcess(parameters));
+                Console.WriteLine(adb.startProcess(parameters, true));
                 worked = true;
             }
             catch (Exception e)
