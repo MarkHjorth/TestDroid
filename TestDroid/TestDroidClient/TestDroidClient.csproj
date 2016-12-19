@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{472EEAA9-ED86-4C91-A3F0-928E700A9221}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>TestDroid.UITests</RootNamespace>
-    <AssemblyName>TestDroid.UITests</AssemblyName>
+    <ProjectGuid>{C531D332-F34C-4282-B3B6-F03575632742}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>TestDroidClient</RootNamespace>
+    <AssemblyName>TestDroidClient</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -17,37 +17,29 @@
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <ExternalConsole>true</ExternalConsole>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <ExternalConsole>true</ExternalConsole>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="Xamarin.UITest, Version=2.0.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xamarin.UITest.2.0.3\lib\Xamarin.UITest.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TestDroid\TestDroid.csproj">
-      <Project>{86532009-6181-4585-9E36-1B80FF37CDD6}</Project>
-      <Name>TestDroid</Name>
-      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
-      <Private>False</Private>
-    </ProjectReference>
+    <Compile Include="ApkInstaller.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Controller.cs" />
+    <Compile Include="TCPConnection.cs" />
+    <Compile Include="Flightmode.cs" />
+    <Compile Include="ADBhandler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Tests.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <Folder Include="ADB\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
