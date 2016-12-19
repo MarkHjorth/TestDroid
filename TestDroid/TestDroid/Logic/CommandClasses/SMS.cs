@@ -48,8 +48,36 @@ namespace TestDroid
         /// <param name="text">The text (Body) of the SMS message</param>
         /// <param name="phoneNumber">The phone number to send the SMS to</param>
         /// <returns>True if the SMS is send</returns>
-		public bool SendSMS(string text, string phoneNumber)
+		public bool SendSMS(string[] args)
 		{
+            string text = "Harambe did 9/11";
+            string phoneNumber = "41618934";
+
+            switch (args.Length)
+            {
+                case 1:
+                    break;
+                case 2:
+                    text = args[1];
+                    break;
+                case 3:
+                    text = args[1];
+                    phoneNumber = args[2];
+                    break;
+                default:
+                    try
+                    {
+                        text = args[1];
+                        phoneNumber = args[2];
+                    }
+                    catch (Exception e)
+                    {
+                        logger.LogEvent(e.StackTrace, 3);
+                        throw;
+                    }
+                    break;
+            }
+
             int countBefore = 0;
 
             try

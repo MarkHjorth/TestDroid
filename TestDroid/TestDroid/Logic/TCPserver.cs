@@ -64,18 +64,23 @@ namespace TestDroid
             writer.Write("Connection established!");
             logger.LogEvent("Client connected!");
 
-			string command = "";
+            string fullCommand = "";
+            string command = "";
+            string[] args;
 			//Step 4: Read string data from client (command)
 			do
 			{
 				try
 				{
-					command = reader.ReadString();
+					fullCommand = reader.ReadString();
 
-					switch (command)
+                    args = fullCommand.Split(' ');
+                    command = args[0];
+
+                    switch (command)
 					{
 						case "sendSMS":
-							controller.SendSMS();
+							controller.SendSMS(args);
 							break;
 
 						default:

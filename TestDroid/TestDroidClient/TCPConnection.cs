@@ -8,6 +8,8 @@ namespace TestDroidClient
 {
 	public class TCPConnection
 	{
+        private static TCPConnection instance;
+
 		private NetworkStream output;
 		private BinaryWriter writer;
 		private BinaryReader reader;
@@ -16,7 +18,7 @@ namespace TestDroidClient
 
         public bool GotIO { get; set; }
 
-        public TCPConnection()
+        private TCPConnection()
 		{
             adb = new ADBhandler();
             GotIO = false;
@@ -34,6 +36,15 @@ namespace TestDroidClient
             }
 
 		}
+
+        public static TCPConnection GetInstance()
+        {
+            if(instance == null)
+            {
+                instance = new TCPConnection();
+            }
+            return instance;
+        }
 
 		private void PortForward(int remotePort, int localPort)
 		{
@@ -90,7 +101,8 @@ namespace TestDroidClient
 				}
 				catch(Exception e)
 				{
-					throw e;
+                    Console.WriteLine(e.StackTrace);
+                    break;
 				}
 
 			}
@@ -106,11 +118,28 @@ namespace TestDroidClient
 			{
 				throw e;
 			}
-
 		}
 
 		public bool SendCommand(string command)
 		{
+            for (int i = 0; i < 5; i++)
+            {
+                if (writer == null && i != 4)
+                {
+                    Thread.Sleep(1000);
+                    Console.WriteLine("Waiting for connection to server");
+                }
+                else
+                {
+                    i = 5;
+                }
+                if(i == 4)
+                {
+                    Console.WriteLine("No connection could be established! Check the server!");
+                    return false;
+                }
+            }
+
 			try
 			{
 				writer.Write(command);
@@ -119,7 +148,9 @@ namespace TestDroidClient
 			}
 			catch(Exception e)
 			{
-				throw e;
+                Console.WriteLine(e.StackTrace);
+                Console.WriteLine("No connection");
+                return false;
 			}
 		}
 	}
