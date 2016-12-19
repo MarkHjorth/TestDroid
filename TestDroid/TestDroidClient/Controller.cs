@@ -10,7 +10,6 @@ namespace TestDroidClient
 		{
             try
             {
-                tcpConnection = new TCPConnection();
 				flightmode = new Flightmode();
 
                 while(!tcpConnection.GotIO)
@@ -35,8 +34,9 @@ namespace TestDroidClient
 
 			switch (command)
 			{
-				case "sendSMS":
-					if (tcpConnection.SendCommand(fullCommand))
+				case "sendSMS": //Other cases here
+                    tcpConnection = new TCPConnection();
+                    if (tcpConnection.SendCommand(fullCommand))
 					{
 						Console.WriteLine("Prolihøhar");
 					}
