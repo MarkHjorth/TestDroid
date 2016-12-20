@@ -15,6 +15,7 @@ namespace TestDroid
         ArrayAdapter<string> arrayAdapter;
         List<string> logs;
         Logger logger;
+		Button button_makeCall;
 
         Context context;
 
@@ -36,6 +37,7 @@ namespace TestDroid
 		private void FindViews()
 		{
             logList = FindViewById<ListView>(Resource.Id.logList);
+			button_makeCall = FindViewById<Button>(button_makeCall);
 
             logs = new List<string>();
             logs.Add("EVENTS:");
