@@ -83,8 +83,8 @@ namespace TestDroidClient
 			Console.WriteLine("Turning flightmode " + stringStatus + "...");
 
 			// Create the ADB arguments for turning on airplane mode, and broadcasting to the phone, that we did.
-			string flightmode = string.Format("shell settings put global airplane_mode_on {0}", status);
-			string broadcast = "shell am broadcast -a android.intent.action.AIRPLANE_MODE";
+			string flightmode = string.Format("-d shell settings put global airplane_mode_on {0}", status);
+			string broadcast = "-d shell am broadcast -a android.intent.action.AIRPLANE_MODE";
 
 			// First change flightmode and then tell phone that we changed it.
 			adb.startProcess(flightmode);
@@ -118,7 +118,7 @@ namespace TestDroidClient
 			Console.WriteLine("Checking flightmode status...");
 
 			// Set ADB arguments to check flightmode status and execute it:
-			string checkAirplanemode = "shell settings get global airplane_mode_on";
+			string checkAirplanemode = "-d shell settings get global airplane_mode_on";
 			output = adb.startProcess(checkAirplanemode);
 
 			// Parse the string output to an int (1/0)
