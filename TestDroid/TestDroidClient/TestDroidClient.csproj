@@ -30,16 +30,14 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApkInstaller.cs" />
+    <Compile Include="Controllers\ApkInstaller.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Controller.cs" />
-    <Compile Include="TCPConnection.cs" />
-    <Compile Include="Flightmode.cs" />
-    <Compile Include="ADBhandler.cs" />
+    <Compile Include="Controllers\Controller.cs" />
+    <Compile Include="Connection\TCPConnection.cs" />
+    <Compile Include="Controllers\Flightmode.cs" />
+    <Compile Include="ADB\ADBhandler.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ADB\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

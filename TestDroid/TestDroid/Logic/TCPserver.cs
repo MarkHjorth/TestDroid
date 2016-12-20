@@ -82,7 +82,6 @@ namespace TestDroid
 						case "sendSMS":
 							controller.SendSMS(args);
 							break;
-
 						default:
 							break;
 					}

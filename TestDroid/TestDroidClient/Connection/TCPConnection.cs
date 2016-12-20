@@ -34,7 +34,6 @@ namespace TestDroidClient
             {
                 throw e;
             }
-
 		}
 
         public static TCPConnection GetInstance()
