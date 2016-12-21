@@ -8,6 +8,7 @@ namespace TestDroidClient
 	{
 		TCPConnection tcpConnection;
 		private Flightmode flightmode;
+		private Call call;
         private ApkInstaller apk;
         private bool stopConnection = false;
 
@@ -18,6 +19,7 @@ namespace TestDroidClient
             try
             {
 				flightmode = new Flightmode();
+				call = new Call();
                 apk = new ApkInstaller();
 
                 if (args.Length >= 1)
@@ -48,6 +50,9 @@ namespace TestDroidClient
 				case "flightmode":
 					flightmode.HandleFlightmode(args);
                     break;
+				case "call":
+					call.HandleCall(args);
+					break;
                 case "installApk":
                     apk.InstallApk();
 				    break;
