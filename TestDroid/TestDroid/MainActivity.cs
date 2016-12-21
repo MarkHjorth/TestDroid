@@ -5,10 +5,11 @@ using System.Threading;
 using Android.Content;
 using System.Collections.Generic;
 using TestDroid.Logic.Controller;
+using Android.Content.PM;
 
 namespace TestDroid
 {
-	[Activity(Label = "TestDroid", MainLauncher = true, Icon = "@mipmap/icon")]
+	[Activity(Label = "TestDroid", MainLauncher = true, Icon = "@mipmap/icon", ScreenOrientation = ScreenOrientation.Portrait)]
 	public class MainActivity : Activity
 	{
         ListView logList;
@@ -21,9 +22,8 @@ namespace TestDroid
         protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
-
-			// Set our view from the "main" layout resource
-			SetContentView(Resource.Layout.Main);
+            // Set our view from the "main" layout resource
+            SetContentView(Resource.Layout.Main);
 
 			FindViews();
 			AddHandlers();
