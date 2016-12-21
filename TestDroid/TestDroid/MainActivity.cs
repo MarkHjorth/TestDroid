@@ -16,8 +16,8 @@ namespace TestDroid
         List<string> logs;
         Logger logger;
 		Button button_makeCall;
-
         Context context;
+		ButtonHandlers buttonHandler;
 
         protected override void OnCreate(Bundle savedInstanceState)
 		{
@@ -36,8 +36,10 @@ namespace TestDroid
 
 		private void FindViews()
 		{
+			buttonHandler = new ButtonHandlers();
+
             logList = FindViewById<ListView>(Resource.Id.logList);
-			button_makeCall = FindViewById<Button>(button_makeCall);
+			button_makeCall = FindViewById<Button>(Resource.Id.button_makeCall);
 
             logs = new List<string>();
             logs.Add("EVENTS:");
@@ -48,8 +50,10 @@ namespace TestDroid
             context = Application.Context;
         }
 
+
 		private void AddHandlers()
 		{
+			button_makeCall.Click += buttonHandler.ButtonMakeCallHandler;
 		}
 
 		private void StartServer()
