@@ -1,2 +1,2 @@
 @echo off
-start "TestDroid" "TestDroid.exe" flightmode 0
+"TestDroidClient.exe" flightmode 0
