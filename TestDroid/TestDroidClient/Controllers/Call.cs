@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace TestDroidClient
 {
 	/// <summary>
@@ -66,7 +67,7 @@ namespace TestDroidClient
 				// If argument is answer, we want to answer a phone call
 				case "answer":
 					{
-						didSucceed = CallAnswer(args);
+						didSucceed = CallAnswer();
 						break;
 					}
 				// If argument is dial, we want to make a phone call
@@ -93,18 +94,31 @@ namespace TestDroidClient
 		/// Method to answer an incomming call
 		/// </summary>
 		/// <returns><c>true</c>, if call was answered, <c>false</c> otherwise.</returns>
-		/// <param name="args">Arguments.</param>
-		private bool CallAnswer(string[] args)
+		private bool CallAnswer()
 		{
 			bool didSucceed = false;
 			string output;
+			string answerPhoneCallCommand;
+			string getPhoneCallStatusCommand;
+			string stringSucceed;
 			ADBhandler adb = new ADBhandler();
 
-			string adbArguments = "-d shell service call phone 6";
 
-			output = adb.startProcess(adbArguments);
+			answerPhoneCallCommand = "-d shell service call phone 6";
+			getPhoneCallStatusCommand = "-d shell dumpsys telephony.registry | grep \"mCallState\"";
 
-			Console.WriteLine(output);
+			Console.WriteLine("Answering call...");
+			adb.startProcess(answerPhoneCallCommand, false, 2500);
+
+			Console.WriteLine("Checking if call was answered...");
+			output = adb.startProcess(getPhoneCallStatusCommand);
+
+			// When a call is active, the getPhoneCallStatusCommand will return: "mCallState=2"
+			didSucceed = output.Contains("2");
+
+			stringSucceed = (didSucceed) ? "succeded" : "failed";
+
+			Console.WriteLine("Call answer " + stringSucceed + ".");
 
 			return didSucceed;
 		}

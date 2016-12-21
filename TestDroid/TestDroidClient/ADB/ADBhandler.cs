@@ -32,7 +32,8 @@ namespace TestDroidClient
 		/// <returns>The process.</returns>
 		/// <param name="arguments">ADB commandline arguments.</param>
 		/// <param name="verbose">If set to <c>true</c> verbose.</param>
-		public string startProcess(string arguments, bool verbose = false)
+		/// <param name="timeout">Command timeout in miliseconds.</param>
+		public string startProcess(string arguments, bool verbose = false, int timeout = 30000)
 		{
 			ProcessStartInfo processStartInfo = new ProcessStartInfo(path, arguments);
 			Process process = new Process();
@@ -53,14 +54,17 @@ namespace TestDroidClient
 
 				streamOutput = (!verbose) ? process.StandardOutput : null;
 
-				process.WaitForExit(30000);
+				process.WaitForExit(timeout);
 				if (process.HasExited)
 				{
 					output = (streamOutput == null) ? "Verbose enabled" : streamOutput.ReadToEnd();
 				}
 				else
 				{
-					Console.WriteLine("Operation timed out!");
+					if (verbose)
+					{
+						Console.WriteLine("Operation timed out!");
+					}
 					output = failedOutput;
 				}
 			}
