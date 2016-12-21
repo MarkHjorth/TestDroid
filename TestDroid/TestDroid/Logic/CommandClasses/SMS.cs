@@ -51,7 +51,7 @@ namespace TestDroid
 		public bool SendSMS(string[] args)
 		{
             string text = "Harambe did 9/11";
-            string phoneNumber = "41618934";
+            string phoneNumber = "71840913";
 
             switch (args.Length)
             {
