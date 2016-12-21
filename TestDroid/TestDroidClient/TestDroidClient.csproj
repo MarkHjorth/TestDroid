@@ -37,6 +37,7 @@
     <Compile Include="Connection\TCPConnection.cs" />
     <Compile Include="Controllers\Flightmode.cs" />
     <Compile Include="ADB\ADBhandler.cs" />
+    <Compile Include="Controllers\Call.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
