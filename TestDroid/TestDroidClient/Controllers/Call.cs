@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace TestDroidClient
 {
@@ -70,6 +71,12 @@ namespace TestDroidClient
 						didSucceed = CallAnswer();
 						break;
 					}
+				// If argument is end, we want to end a phone call
+				case "end":
+					{
+						didSucceed = CallEnd();
+						break;
+					}
 				// If argument is dial, we want to make a phone call
 				case "dial":
 					{
@@ -119,6 +126,42 @@ namespace TestDroidClient
 			stringSucceed = (didSucceed) ? "succeded" : "failed";
 
 			Console.WriteLine("Call answer " + stringSucceed + ".");
+
+			return didSucceed;
+		}
+
+		/// <summary>
+		/// Method to end an active call
+		/// </summary>
+		/// <returns><c>true</c>, if call was answered, <c>false</c> otherwise.</returns>
+		private bool CallEnd()
+		{
+			bool didSucceed = false;
+			string output;
+			string endPhoneCallCommand;
+			string getPhoneCallStatusCommand;
+			string stringSucceed;
+			ADBhandler adb = new ADBhandler();
+
+			endPhoneCallCommand = "-d shell input keyevent KEYCODE_ENDCALL";
+			getPhoneCallStatusCommand = "-d shell dumpsys telephony.registry | grep \"mCallState\"";
+
+			Console.WriteLine("Ending call...");
+			adb.startProcess(endPhoneCallCommand, false, 2500);
+
+			Thread.Sleep(2500);
+
+			Console.WriteLine("Checking if call was ended...");
+			output = adb.startProcess(getPhoneCallStatusCommand);
+
+			// When a call is not active, the getPhoneCallStatusCommand will return: "mCallState=0"
+			didSucceed = output.Contains("0");
+
+			Console.WriteLine(output);
+
+			stringSucceed = (didSucceed) ? "succeded" : "failed";
+
+			Console.WriteLine("Call end " + stringSucceed + ".");
 
 			return didSucceed;
 		}
