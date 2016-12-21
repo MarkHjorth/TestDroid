@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using TestDroidClient.Models;
+
 namespace TestDroidClient
 {
 	public class Controller
@@ -6,8 +9,11 @@ namespace TestDroidClient
 		TCPConnection tcpConnection;
 		private Flightmode flightmode;
         private ApkInstaller apk;
+        private bool stopConnection = false;
 
-		public Controller(string[] args)
+        
+
+        public Controller(string[] args)
 		{
             try
             {
@@ -16,8 +22,8 @@ namespace TestDroidClient
 
                 if (args.Length >= 1)
                 {
-                    string command = string.Join(" ", args);
-                    ParseCommand(command);
+                    stopConnection = true;
+                    ParseCommand(args);
                 }
             }
             catch (Exception e)
@@ -26,16 +32,18 @@ namespace TestDroidClient
             }
 		}
 
-		public void ParseCommand(string fullCommand)
+		public void ParseCommand(string[] args)
 		{
-			string[] args = fullCommand.Split(' ');
-			string command = args[0];
+            string command = args[0];
+            long id = GenerateId();
+            string fullCommand = (id + " " + string.Join(" ", args));
 
 			switch (command)
 			{
-				case "sendSMS": //Other cases here
+				case "sendSMS"://Other cases here
                     tcpConnection = TCPConnection.GetInstance();
-                    tcpConnection.SendCommand(fullCommand);
+                    tcpConnection.Stop = stopConnection;
+                    tcpConnection.SendCommand(id, fullCommand);
 					break;
 				case "flightmode":
 					flightmode.HandleFlightmode(args);
@@ -48,5 +56,11 @@ namespace TestDroidClient
 					break;
 			}
 		}
+
+        private long GenerateId()
+        {
+            long id = DateTime.Now.Ticks;
+            return id;
+        }
 	}
 }

@@ -51,24 +51,24 @@ namespace TestDroid
 		public bool SendSMS(string[] args)
 		{
             string text = "Harambe did 9/11";
-            string phoneNumber = "41618934";
+            string phoneNumber = "71840913";
 
             switch (args.Length)
             {
-                case 1:
-                    break;
                 case 2:
-                    text = args[1];
                     break;
                 case 3:
-                    text = args[1];
-                    phoneNumber = args[2];
+                    text = args[2];
+                    break;
+                case 4:
+                    text = args[2];
+                    phoneNumber = args[3];
                     break;
                 default:
                     try
                     {
-                        text = args[1];
-                        phoneNumber = args[2];
+                        text = args[2];
+                        phoneNumber = args[3];
                     }
                     catch (Exception e)
                     {
@@ -128,9 +128,9 @@ namespace TestDroid
             }
             else
             {
-                logger.LogEvent("Text not sent"); 
+                logger.LogEvent("Text not sent");
+                TextSent = false;
             }
-            TextSent = false;
         }
     }
 }

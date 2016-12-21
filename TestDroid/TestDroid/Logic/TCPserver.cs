@@ -61,27 +61,34 @@ namespace TestDroid
 
 		private void ServerClientInteraction()
 		{
-            writer.Write("Connection established!");
             logger.LogEvent("Client connected!");
 
+            string id;
             string fullCommand = "";
             string command = "";
             string[] args;
-			//Step 4: Read string data from client (command)
-			do
+            bool success;
+            //Step 4: Read string data from client (command)
+            do
 			{
 				try
 				{
 					fullCommand = reader.ReadString();
 
                     args = fullCommand.Split(' ');
-                    command = args[0];
+                    id = args[0];
+                    command = args[1];
+                    success = false;
 
                     switch (command)
 					{
 						case "sendSMS":
-							controller.SendSMS(args);
+							success = controller.SendSMS(args);
+                            Respond(id, success);
 							break;
+                        case "stop":
+                            writer.Write("stop");
+                            break;
 						default:
 							break;
 					}
@@ -99,5 +106,12 @@ namespace TestDroid
 			}
 			while (command != "stop");
 		}
+
+        private void Respond(string id, bool success)
+        {
+            string response = string.Format("{0} {1}", id, success);
+
+            writer.Write(response);
+        }
 	}
 }
