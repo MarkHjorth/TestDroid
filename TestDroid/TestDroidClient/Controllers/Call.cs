@@ -9,12 +9,14 @@ namespace TestDroidClient
 	public class Call
 	{
 
-		/// <summary>
-		/// Handles the call command.
-		/// </summary>
-		/// <returns><c>true</c>, if call succeded, <c>false</c> otherwise.</returns>
-		/// <param name="args">Arguments to handle call. Answer for answering call, dial to make call, or help for help.</param>
-		public bool HandleCall(string[] args)
+        ADBhandler adb = new ADBhandler();
+
+        /// <summary>
+        /// Handles the call command.
+        /// </summary>
+        /// <returns><c>true</c>, if call succeded, <c>false</c> otherwise.</returns>
+        /// <param name="args">Arguments to handle call. Answer for answering call, dial to make call, or help for help.</param>
+        public bool HandleCall(string[] args)
 		{
 			bool didSucceed = false;
 
@@ -108,8 +110,6 @@ namespace TestDroidClient
 			string answerPhoneCallCommand;
 			string getPhoneCallStatusCommand;
 			string stringSucceed;
-			ADBhandler adb = new ADBhandler();
-
 
 			answerPhoneCallCommand = "-d shell service call phone 6";
 			getPhoneCallStatusCommand = "-d shell dumpsys telephony.registry | grep \"mCallState\"";
@@ -118,7 +118,7 @@ namespace TestDroidClient
 			adb.startProcess(answerPhoneCallCommand, false, 2500);
 
 			Console.WriteLine("Checking if call was answered...");
-			output = adb.startProcess(getPhoneCallStatusCommand);
+			output = adb.startProcess(getPhoneCallStatusCommand, timeout: 2000);
 
 			// When a call is active, the getPhoneCallStatusCommand will return: "mCallState=2"
 			didSucceed = output.Contains("2");
@@ -141,7 +141,6 @@ namespace TestDroidClient
 			string endPhoneCallCommand;
 			string getPhoneCallStatusCommand;
 			string stringSucceed;
-			ADBhandler adb = new ADBhandler();
 
 			endPhoneCallCommand = "-d shell input keyevent KEYCODE_ENDCALL";
 			getPhoneCallStatusCommand = "-d shell dumpsys telephony.registry | grep \"mCallState\"";
