@@ -10,11 +10,13 @@ namespace TestDroid
 		private SMS sms;
         Context context;
         Logger logger;
+		Call call;
 
-		public Controller(Context cont)
+		public Controller(Context context)
 		{
-            context = cont;
+            this.context = context;
             logger = Logger.GetInstance();
+			call = new Call(context);
 		}
 
         /// <summary>
@@ -28,6 +30,13 @@ namespace TestDroid
             sms = SMS.GetInstance(context);
 
             return sms.SendSMS(args);
+		}
+
+		public bool MakeCall()
+		{
+			bool didSucceed = false;
+			didSucceed = call.MakeCall();
+			return didSucceed;
 		}
 	}
 }

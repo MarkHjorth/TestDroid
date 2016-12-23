@@ -36,7 +36,8 @@ namespace TestDroid
 
 		private void FindViews()
 		{
-			buttonHandler = new ButtonHandlers();
+			context = Application.Context;
+			buttonHandler = new ButtonHandlers(context);
 
             logList = FindViewById<ListView>(Resource.Id.logList);
 			button_makeCall = FindViewById<Button>(Resource.Id.button_makeCall);
@@ -47,7 +48,7 @@ namespace TestDroid
             logList.Adapter = arrayAdapter;
             logger = Logger.GetInstance(arrayAdapter);
 
-            context = Application.Context;
+            
         }
 
 
