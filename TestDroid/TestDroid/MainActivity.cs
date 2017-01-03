@@ -15,14 +15,14 @@ namespace TestDroid
         ArrayAdapter<string> arrayAdapter;
         List<string> logs;
         Logger logger;
+		Context context;
 		Button button_makeCall;
-        Context context;
 		ButtonHandlers buttonHandler;
 
         protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
-
+			context = this;
 			// Set our view from the "main" layout resource
 			SetContentView(Resource.Layout.Main);
 
@@ -36,19 +36,18 @@ namespace TestDroid
 
 		private void FindViews()
 		{
-			context = Application.Context;
+			logList = FindViewById<ListView>(Resource.Id.logList);
+			logs = new List<string>();
+			logs.Add("EVENTS:");
+			arrayAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, logs);
+			logList.Adapter = arrayAdapter;
+			logger = Logger.GetInstance(arrayAdapter);
+			logger.LogEvent("It works here", 4);
+
 			buttonHandler = new ButtonHandlers(context);
 
-            logList = FindViewById<ListView>(Resource.Id.logList);
-			button_makeCall = FindViewById<Button>(Resource.Id.button_makeCall);
-
-            logs = new List<string>();
-            logs.Add("EVENTS:");
-            arrayAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, logs);
-            logList.Adapter = arrayAdapter;
-            logger = Logger.GetInstance(arrayAdapter);
-			logger.LogEvent("It works here", 4);
-            
+           
+			button_makeCall = FindViewById<Button>(Resource.Id.button_makeCall); 
         }
 
 
