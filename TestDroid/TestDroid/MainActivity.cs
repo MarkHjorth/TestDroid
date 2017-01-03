@@ -47,7 +47,7 @@ namespace TestDroid
             arrayAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, logs);
             logList.Adapter = arrayAdapter;
             logger = Logger.GetInstance(arrayAdapter);
-
+			logger.LogEvent("It works here", 4);
             
         }
 

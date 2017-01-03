@@ -14,7 +14,7 @@ namespace TestDroid.Logic.Controller
 {
     class Logger : Activity
     {
-        private static Logger instance;
+		private static Logger instance;
         private ArrayAdapter logAdapter;
 
         private Logger(ArrayAdapter adapter)
@@ -28,6 +28,7 @@ namespace TestDroid.Logic.Controller
         /// <returns>Logger</returns>
         public static Logger GetInstance(ArrayAdapter adapter = null)
         {
+			//instance = null;
             if(instance == null)
             {
                 instance = new Logger(adapter);

@@ -20,8 +20,10 @@ namespace TestDroid
 
 		public void ButtonMakeCallHandler(object sender, EventArgs e)
 		{
-			//logger.LogEvent("jada");
-			controller.MakeCall();
+			if (controller.MakeCall())
+			{
+				logger.LogEvent("Call succeeded", 0);
+			}
 		}
 
 	}
