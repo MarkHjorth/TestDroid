@@ -1,8 +1,10 @@
-﻿    using System;
+﻿using System;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 using System.Diagnostics;
+using System.Collections.Generic;
+using TestDroidClient.Models;
 
 namespace TestDroidClient
 {
@@ -15,9 +17,14 @@ namespace TestDroidClient
 		private BinaryReader reader;
 		private TcpClient client;
         private ADBhandler adb;
+        Dictionary<long, CommandClass> commandArray = new Dictionary<long, CommandClass>();
 
         public bool GotIO { get; set; }
+        public bool Stop { get; set; }
 
+        /// <summary>
+        /// The TCP constructor. Calls the methods to start the TCP connection
+        /// </summary>
         private TCPConnection()
 		{
             adb = new ADBhandler();
@@ -36,6 +43,10 @@ namespace TestDroidClient
             }
 		}
 
+        /// <summary>
+        /// Singleton GetInstance() method
+        /// </summary>
+        /// <returns>returns singleton instance of TCPConnection</returns>
         public static TCPConnection GetInstance()
         {
             if(instance == null)
@@ -45,6 +56,11 @@ namespace TestDroidClient
             return instance;
         }
 
+        /// <summary>
+        /// Forwarding the ports needed for TCP connection
+        /// </summary>
+        /// <param name="remotePort">Port to talk to on server</param>
+        /// <param name="localPort">Port to use internally</param>
 		private void PortForward(int remotePort, int localPort)
 		{
             try
@@ -59,6 +75,10 @@ namespace TestDroidClient
             Console.WriteLine("Port forwarded");
 		}
 
+        /// <summary>
+        /// Initialize the client connection to the server
+        /// </summary>
+        /// <param name="remotePort">The port on the server to atempt to connect to</param>
 		private void InitClient(int remotePort)
 		{
             try
@@ -72,6 +92,11 @@ namespace TestDroidClient
             }
 		}
 
+        /// <summary>
+        /// Creates the actual TCP connectionand connects it to the server, on the specified port
+        /// Reads messages from the server
+        /// </summary>
+        /// <param name="port">Server port to connect to</param>
 		private void RunClient(int port)
 		{
 			string message = "";
@@ -96,22 +121,45 @@ namespace TestDroidClient
 				try
 				{
 					message = reader.ReadString();
-					Console.WriteLine(message);
-				}
+                    string[] messageArgs = message.Split(' ');
+                    try
+                    {
+                        long id = long.Parse(messageArgs[0]);
+
+                        CommandClass cmd = commandArray[id];
+
+                        string command = cmd.Command.Split(' ')[1];
+                        string worked = messageArgs[1].ToLower();
+                        worked = (worked == "true") ? "Success" : "Failed";
+                        string result = string.Format("{0}: {1}", command, worked);
+
+                        Console.WriteLine(result);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.StackTrace);
+                    }
+
+                    if (Stop && message != null && message != "Connection established!")
+                    {
+                        message = "stop";
+                    }
+                }
 				catch(Exception e)
 				{
                     Console.WriteLine(e.StackTrace);
                     break;
 				}
-
 			}
-			while (message != "stop");
+			while (message.ToLower() != "stop");
+
 			try
 			{
 				writer.Close();
 				reader.Close();
 				output.Close();
 				client.Close();
+                Environment.Exit(0);
 			}
 			catch(Exception e)
 			{
@@ -119,8 +167,14 @@ namespace TestDroidClient
 			}
 		}
 
-		public bool SendCommand(string command)
+        /// <summary>
+        /// Attempts to send the command to the server
+        /// </summary>
+        /// <param name="command">The command to send to the server</param>
+        /// <returns>True if command sent; False if command NOT sent</returns>
+		public bool SendCommand(long id, string command)
 		{
+            // Waits for the esrver to be ready to recieve command
             for (int i = 0; i < 5; i++)
             {
                 if (writer == null && i != 4)
@@ -139,9 +193,13 @@ namespace TestDroidClient
                 }
             }
 
+            // Sending the command to the server
 			try
 			{
-				writer.Write(command);
+                DateTime time = DateTime.Now;
+                CommandClass cmd = new CommandClass(id, command, time);
+                commandArray.Add(id, cmd);
+                writer.Write(command);
                 Console.WriteLine("Command: '" + command + "' sent to server");
 				return true;
 			}

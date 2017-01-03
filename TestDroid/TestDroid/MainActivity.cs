@@ -1,14 +1,15 @@
-﻿using Android.App;
+using Android.App;
 using Android.Widget;
 using Android.OS;
 using System.Threading;
 using Android.Content;
 using System.Collections.Generic;
 using TestDroid.Logic.Controller;
+using Android.Content.PM;
 
 namespace TestDroid
 {
-	[Activity(Label = "TestDroid", MainLauncher = true, Icon = "@mipmap/icon")]
+	[Activity(Label = "TestDroid", MainLauncher = true, Icon = "@mipmap/icon", ScreenOrientation = ScreenOrientation.Portrait)]
 	public class MainActivity : Activity
 	{
         ListView logList;
