@@ -17,9 +17,17 @@ namespace TestDroid
 			this.context = context;
 		}
 
-		public bool MakeCall()
+		public bool MakeCall(string[] args)
 		{
 			bool didSucceed = false;
+            try
+            {
+                phonenumber = args[2];
+            }
+            catch (Exception ex)
+            {
+                logger.LogEvent(ex.Message, 3);
+            }    
 			string url = "tel:" + phonenumber;
 			try
 			{

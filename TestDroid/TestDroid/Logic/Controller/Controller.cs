@@ -32,10 +32,10 @@ namespace TestDroid
             return sms.SendSMS(args);
 		}
 
-		public bool MakeCall()
+		public bool MakeCall(string[] args)
 		{
 			bool didSucceed = false;
-			didSucceed = call.MakeCall();
+			didSucceed = call.MakeCall(args);
 			return didSucceed;
 		}
 	}
