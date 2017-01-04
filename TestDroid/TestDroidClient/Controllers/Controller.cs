@@ -51,7 +51,7 @@ namespace TestDroidClient
 					flightmode.HandleFlightmode(args);
                     break;
 				case "call":
-					call.HandleCall(args);
+					call.HandleCall(args, id);
 					break;
                 case "installApk":
                     apk.InstallApk();

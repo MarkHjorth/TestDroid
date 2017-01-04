@@ -7,7 +7,7 @@ namespace TestDroid
 	public class Call
 	{
 		
-		string phonenumber = "41618934";
+		string phonenumber = "71840913";
 		Context context;
 		Logger logger;
 
@@ -22,7 +22,7 @@ namespace TestDroid
 			bool didSucceed = false;
             try
             {
-                phonenumber = args[2];
+                phonenumber = args[3];
             }
             catch (Exception ex)
             {

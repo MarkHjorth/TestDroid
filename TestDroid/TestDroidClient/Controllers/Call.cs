@@ -13,7 +13,7 @@ namespace TestDroidClient
 		/// </summary>
 		/// <returns><c>true</c>, if call succeded, <c>false</c> otherwise.</returns>
 		/// <param name="args">Arguments to handle call. Answer for answering call, dial to make call, or help for help.</param>
-		public bool HandleCall(string[] args)
+		public bool HandleCall(string[] args, long id)
 		{
 			bool didSucceed = false;
 
@@ -23,7 +23,7 @@ namespace TestDroidClient
 				// If one argument is sent:
 				case 2:
 					{
-						didSucceed = HandleCallAction(args);
+						didSucceed = HandleCallAction(args, id);
 						break;
 					}
 				// If an unexspected amount of arguments were send, give an error:
@@ -51,7 +51,7 @@ namespace TestDroidClient
 		/// </summary>
 		/// <returns><c>true</c>, if call action was handled, <c>false</c> otherwise.</returns>
 		/// <param name="args">Checks to see what to do. answer, dial or display help.</param>
-		private bool HandleCallAction(string[] args)
+		private bool HandleCallAction(string[] args, long id)
 		{
 			bool didSucceed = false;
 
@@ -73,7 +73,7 @@ namespace TestDroidClient
 				// If argument is dial, we want to make a phone call
 				case "dial":
 					{
-						didSucceed = CallDial(args);
+						didSucceed = CallDial(args, id);
 						break;
 					}
 				// If the argument was not recognized, give an errormessage:
@@ -128,12 +128,15 @@ namespace TestDroidClient
 		/// </summary>
 		/// <returns><c>true</c>, if call was successfull, <c>false</c> otherwise.</returns>
 		/// <param name="args">Arguments.</param>
-		private bool CallDial(string[] args)
+
+		private bool CallDial(string[] args, long id)
 		{
 			bool didSucceed = false;
+			string fullCommand = (id + " " + string.Join(" ", args));
 
-			//TODO
-			throw new NotImplementedException("Dial is not yet implemented");
+			TCPConnection connection = TCPConnection.GetInstance();
+
+			didSucceed = connection.SendCommand(id, fullCommand);
 
 			return didSucceed;
 		}
