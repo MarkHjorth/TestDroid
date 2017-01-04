@@ -20,7 +20,8 @@ namespace TestDroid
 
 		public void ButtonMakeCallHandler(object sender, EventArgs e)
 		{
-			if (controller.MakeCall())
+            string[] args = null;
+			if (controller.MakeCall(args))
 			{
 				logger.LogEvent("Call succeeded", 0);
 			}

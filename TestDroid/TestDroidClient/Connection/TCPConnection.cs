@@ -17,7 +17,7 @@ namespace TestDroidClient
 		private BinaryReader reader;
 		private TcpClient client;
         private ADBhandler adb;
-        Dictionary<long, CommandClass> commandArray = new Dictionary<long, CommandClass>();
+        Dictionary<int, CommandClass> commandArray = new Dictionary<int, CommandClass>();
 
         public bool GotIO { get; set; }
         public bool Stop { get; set; }
@@ -124,14 +124,14 @@ namespace TestDroidClient
                     string[] messageArgs = message.Split(' ');
                     try
                     {
-                        long id = long.Parse(messageArgs[0]);
+                        int id = int.Parse(messageArgs[0]);
 
                         CommandClass cmd = commandArray[id];
 
                         string command = cmd.Command.Split(' ')[1];
                         string worked = messageArgs[1].ToLower();
                         worked = (worked == "true") ? "Success" : "Failed";
-                        string result = string.Format("{0}: {1}", command, worked);
+                        string result = string.Format("Command: {0} {1}: {2}", id, command, worked);
 
                         Console.WriteLine(result);
                     }
@@ -172,7 +172,7 @@ namespace TestDroidClient
         /// </summary>
         /// <param name="command">The command to send to the server</param>
         /// <returns>True if command sent; False if command NOT sent</returns>
-		public bool SendCommand(long id, string command)
+		public bool SendCommand(int id, string command)
 		{
             // Waits for the esrver to be ready to recieve command
             for (int i = 0; i < 5; i++)

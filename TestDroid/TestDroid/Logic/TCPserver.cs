@@ -61,7 +61,7 @@ namespace TestDroid
 
 		private void ServerClientInteraction()
 		{
-            writer.Write("Connection established!");
+            //writer.Write("Connection established!");
             logger.LogEvent("Client connected!");
 
             string id;
@@ -85,10 +85,9 @@ namespace TestDroid
 					{
 						case "sendSMS":
 							success = controller.SendSMS(args);
-                            Respond(id, success);
 							break;
 						case "call":
-							controller.MakeCall(args);
+							success = controller.MakeCall(args);
 							break;
                         case "stop":
                             writer.Write("stop");
@@ -96,7 +95,8 @@ namespace TestDroid
 						default:
 							break;
 					}
-				}
+                    Respond(id, success);
+                }
 				catch (EndOfStreamException)
 				{
                     logger.LogEvent("Connection lost");
