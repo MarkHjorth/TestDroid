@@ -6,8 +6,7 @@ namespace TestDroid
 {
 	public class Call
 	{
-		
-		string phonenumber = "71840913";
+		string phonenumber;
 		Context context;
 		Logger logger;
 
@@ -27,6 +26,7 @@ namespace TestDroid
             catch
             {
                 logger.LogEvent("No phone number found. Using default", 2);
+                phonenumber = "71840913";
             }    
 			string url = "tel:" + phonenumber;
 			try

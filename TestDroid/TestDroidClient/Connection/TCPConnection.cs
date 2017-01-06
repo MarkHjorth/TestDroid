@@ -66,7 +66,7 @@ namespace TestDroidClient
             try
             {
                 string parameters = string.Format("-d forward tcp:{0} tcp:{1}", remotePort, localPort);
-                adb.startProcess(parameters);
+                adb.StartProcess(parameters);
             }
 			catch(Exception e)
             {

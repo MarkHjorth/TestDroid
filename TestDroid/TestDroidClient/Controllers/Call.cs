@@ -109,10 +109,10 @@ namespace TestDroidClient
 			getPhoneCallStatusCommand = "-d shell dumpsys telephony.registry | grep \"mCallState\"";
 
 			Console.WriteLine("Answering call...");
-			adb.startProcess(answerPhoneCallCommand, false, 2500);
+			adb.StartProcess(answerPhoneCallCommand, false, 2500);
 
 			Console.WriteLine("Checking if call was answered...");
-			output = adb.startProcess(getPhoneCallStatusCommand);
+			output = adb.StartProcess(getPhoneCallStatusCommand);
 
 			// When a call is active, the getPhoneCallStatusCommand will return: "mCallState=2"
 			didSucceed = output.Contains("2");
