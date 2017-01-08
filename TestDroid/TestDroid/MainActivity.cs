@@ -36,7 +36,6 @@ namespace TestDroid
 		private void FindViews()
 		{
             logList = FindViewById<ListView>(Resource.Id.logList);
-
             logs = new List<string>();
             logs.Add("EVENTS:");
             arrayAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, logs);

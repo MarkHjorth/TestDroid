@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using Android.Content;
 using TestDroid.Logic.Controller;
+using System.Threading.Tasks;
 
 namespace TestDroid
 {
@@ -63,36 +64,19 @@ namespace TestDroid
 		{
             logger.LogEvent("Client connected!");
 
-            string id;
             string fullCommand = "";
             string command = "";
-            string[] args;
-            bool success;
+            
             //Step 4: Read string data from client (command)
             do
 			{
 				try
 				{
 					fullCommand = reader.ReadString();
-
-                    args = fullCommand.Split(' ');
-                    id = args[0];
-                    command = args[1];
-                    success = false;
-
-                    switch (command)
-					{
-						case "sendSMS":
-							success = controller.SendSMS(args);
-                            Respond(id, success);
-							break;
-                        case "stop":
-                            writer.Write("stop");
-                            break;
-						default:
-							break;
-					}
-				}
+                    command = fullCommand.Split(' ')[1];
+                    Task commandTask = RunCommand(fullCommand);
+                    //commandTask.Start();
+                }
 				catch (EndOfStreamException)
 				{
                     logger.LogEvent("Connection lost");
@@ -106,6 +90,42 @@ namespace TestDroid
 			}
 			while (command != "stop");
 		}
+
+        private async Task RunCommand(string fullCommand)
+        {
+            string id;
+            string[] args;
+            string command;
+            bool success;
+            try
+            {
+                args = fullCommand.Split(' ');
+                id = args[0];
+                command = args[1];
+                success = false;
+
+                switch (command)
+                {
+                    case "sendSMS":
+                        success = controller.SendSMS(args);
+                        break;
+                    case "call":
+                        //success = controller.MakeCall(args);
+                        break;
+                    case "stop":
+                        writer.Write("stop");
+                        break;
+                    default:
+                        break;
+                }
+                Respond(id, success);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
         private void Respond(string id, bool success)
         {
