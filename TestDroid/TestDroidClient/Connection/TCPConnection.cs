@@ -205,7 +205,7 @@ namespace TestDroidClient
 			}
 			catch(Exception e)
 			{
-                Console.WriteLine(e.StackTrace);
+                Console.WriteLine(e.Message);
                 Console.WriteLine("No connection");
                 return false;
 			}

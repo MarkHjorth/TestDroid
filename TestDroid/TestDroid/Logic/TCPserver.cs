@@ -75,7 +75,6 @@ namespace TestDroid
 					fullCommand = reader.ReadString();
                     command = fullCommand.Split(' ')[1];
                     Task commandTask = RunCommand(fullCommand);
-                    //commandTask.Start();
                 }
 				catch (EndOfStreamException)
 				{
@@ -103,11 +102,13 @@ namespace TestDroid
                 id = args[0];
                 command = args[1];
                 success = false;
+                Task<bool> commandTask;
 
                 switch (command)
                 {
                     case "sendSMS":
-                        success = controller.SendSMS(args);
+                        commandTask = controller.SendSMS(args);
+                        success = await commandTask;
                         break;
                     case "call":
                         //success = controller.MakeCall(args);

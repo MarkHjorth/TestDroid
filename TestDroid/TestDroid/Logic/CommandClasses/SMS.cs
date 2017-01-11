@@ -5,6 +5,7 @@ using Android.Database;
 using Android.Content;
 using TestDroid.Logic.Controller;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace TestDroid
 {
@@ -26,8 +27,6 @@ namespace TestDroid
             logger = Logger.GetInstance();
 		}
 
-        public bool TextSent { get; set; }
-
         /// <summary>
         /// Calls and returns the only possible instance of SMS
         /// </summary>
@@ -48,9 +47,10 @@ namespace TestDroid
         /// <param name="text">The text (Body) of the SMS message</param>
         /// <param name="phoneNumber">The phone number to send the SMS to</param>
         /// <returns>True if the SMS is send</returns>
-		public bool SendSMS(string[] args)
+		public async Task<bool> SendSMS(string[] args)
 		{
-            string text = "Harambe did 9/11";
+            bool textSent = false;
+            string text = "This text is sent by the TesDroid Application";
             string phoneNumber = "71840913";
 
             switch (args.Length)
@@ -72,65 +72,57 @@ namespace TestDroid
                     }
                     catch (Exception e)
                     {
-                        logger.LogEvent(e.StackTrace, 3);
+                        logger.LogEvent(e.Message, 3);
                         throw;
                     }
                     break;
             }
 
-            int countBefore = 0;
+            CancellationToken cancle = new CancellationTokenSource(2500).Token;
 
-            try
-            {
-                uri = Telephony.Sms.ContentUri;
-                cursor = context.ContentResolver.Query(uri, null, "read = 1", null, null);
-                countBefore = cursor.Count;
-            }
-            catch (Exception e)
-            {
-                logger.LogEvent(e.StackTrace, 3);
-            }
+            Task<bool> checkIfSent = Task.Run(() => CountSms(cancle));
 
             try
 			{
                 logger.LogEvent("Sending SMS to: " + phoneNumber);
 				smsManager.SendTextMessage(phoneNumber, null, text, null, null);
-                TextSent = true;
 			}
 			catch(Exception e)
 			{
-                logger.LogEvent(e.StackTrace, 3);
-                TextSent = false;
+                logger.LogEvent(e.Message, 3);
+                textSent = false;
 			}
 
-            Thread t = new Thread(new ThreadStart(() => CountSms(countBefore)));
-            t.Start();
-            t.Join();
-			return TextSent;
+            textSent = await checkIfSent;
+            
+			return textSent;
 		}
         
-        private void CountSms(int before)
+        private async Task<bool> CountSms(CancellationToken cancle)
         {
-            int after = 0;
-            uri = Telephony.Sms.ContentUri;
+            bool textSent = false;
+            uri = Telephony.Sms.Sent.ContentUri;
             cursor = context.ContentResolver.Query(uri, null, "read = 1", null, null);
-            before = cursor.Count;
 
-            Thread.Sleep(2000);
+            int before = cursor.Count;
+            int after = cursor.Count;
 
-            uri = Telephony.Sms.ContentUri;
-            cursor = context.ContentResolver.Query(uri, null, "read = 1", null, null);
-            after = cursor.Count;
+            while (before == after)
+            {
+                cursor = context.ContentResolver.Query(uri, null, "read = 1", null, null);
+                after = cursor.Count;
+                if(cancle.IsCancellationRequested)
+                {
+                    logger.LogEvent("Tex no sent. Timeout", 2);
+                    return textSent;
+                }
+            }
             if (before != after)
             {
                 logger.LogEvent("Text sent!");
-                TextSent = true;
+                textSent = true;
             }
-            else
-            {
-                logger.LogEvent("Text not sent");
-                TextSent = false;
-            }
+            return textSent;
         }
     }
 }
