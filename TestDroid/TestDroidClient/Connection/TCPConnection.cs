@@ -5,6 +5,7 @@ using System.Threading;
 using System.Diagnostics;
 using System.Collections.Generic;
 using TestDroidClient.Models;
+using System.Threading.Tasks;
 
 namespace TestDroidClient
 {
@@ -100,6 +101,7 @@ namespace TestDroidClient
 		private void RunClient(int port)
 		{
 			string message = "";
+            string worked = "false";
 
 			try
 			{
@@ -129,7 +131,7 @@ namespace TestDroidClient
                         CommandClass cmd = commandArray[id];
 
                         string command = cmd.Command.Split(' ')[1];
-                        string worked = messageArgs[1].ToLower();
+                        worked = messageArgs[1].ToLower();
                         worked = (worked == "true") ? "Success" : "Failed";
                         string result = string.Format("{0}: {1}", command, worked);
 
@@ -142,7 +144,14 @@ namespace TestDroidClient
 
                     if (Stop && message != null && message != "Connection established!")
                     {
-                        message = "stop";
+                        if(worked == "Success")
+                        {
+                            Environment.Exit(0);
+                        }
+                        else
+                        {
+                            Environment.Exit(1);
+                        }
                     }
                 }
 				catch(Exception e)
@@ -172,29 +181,22 @@ namespace TestDroidClient
         /// </summary>
         /// <param name="command">The command to send to the server</param>
         /// <returns>True if command sent; False if command NOT sent</returns>
-		public bool SendCommand(long id, string command)
+		public async Task<bool> SendCommand(long id, string command)
 		{
+            bool connectionOpen = false;
             // Waits for the esrver to be ready to recieve command
-            for (int i = 0; i < 5; i++)
+            CancellationToken cancle = new CancellationTokenSource(2500).Token;
+
+            Task<bool> waitForWriter = Task.Run(() => WaitForWriter(cancle));
+            connectionOpen = await waitForWriter;
+
+            if(!connectionOpen)
             {
-                if (writer == null && i != 4)
-                {
-                    Thread.Sleep(1000);
-                    Console.WriteLine("Waiting for connection to server");
-                }
-                else
-                {
-                    i = 5;
-                }
-                if(i == 4)
-                {
-                    Console.WriteLine("No connection could be established! Check the server!");
-                    return false;
-                }
+                return false;
             }
 
             // Sending the command to the server
-			try
+            try
 			{
                 DateTime time = DateTime.Now;
                 CommandClass cmd = new CommandClass(id, command, time);
@@ -210,5 +212,21 @@ namespace TestDroidClient
                 return false;
 			}
 		}
-	}
+
+        private async Task<bool> WaitForWriter(CancellationToken cancle)
+        {
+            bool connectionOpen = false;
+            while(writer == null)
+            {
+                if (cancle.IsCancellationRequested)
+                {
+                    Console.WriteLine("No connection could be established! Check the server!");
+                    return connectionOpen;
+                }
+            }
+            connectionOpen = true;
+            return connectionOpen;
+        }
+
+    }
 }

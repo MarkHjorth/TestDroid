@@ -14,7 +14,7 @@ namespace TestDroidClient
                 {
                     string[] inputArgs = Console.ReadLine().Split(' ');
                     ctrl.ParseCommand(inputArgs);
-                } while (true); 
+                } while (true);
             }
         }
 	}

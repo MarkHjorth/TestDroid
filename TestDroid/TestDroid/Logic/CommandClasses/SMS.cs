@@ -113,7 +113,7 @@ namespace TestDroid
                 after = cursor.Count;
                 if(cancle.IsCancellationRequested)
                 {
-                    logger.LogEvent("Tex no sent. Timeout", 2);
+                    logger.LogEvent("Text not sent. Timeout", 2);
                     return textSent;
                 }
             }
