@@ -58,20 +58,20 @@ namespace TestDroidClient
 
 			switch (args[1])
 			{
-				// If argument is help, we should answer with usage information
+				// If argument is help, it answers with usage possible inputs
 				case "help":
 					{
 						Console.WriteLine("Call usage: call [answer | dial]");
 						didSucceed = false;
 						break;
 					}
-				// If argument is answer, we want to answer a phone call
+				// If argument is answer, user will answer a phone call
 				case "answer":
 					{
 						didSucceed = CallAnswer();
 						break;
 					}
-				// If argument is dial, we want to make a phone call
+				// If argument is dial, user will make a phone call
 				case "dial":
 					{
 						didSucceed = CallDial(args, id);
@@ -134,11 +134,8 @@ namespace TestDroidClient
 		{
 			bool didSucceed = false;
 			string fullCommand = (id + " " + string.Join(" ", args));
-
 			TCPConnection connection = TCPConnection.GetInstance();
-
 			didSucceed = connection.SendCommand(id, fullCommand);
-
 			return didSucceed;
 		}
 	}

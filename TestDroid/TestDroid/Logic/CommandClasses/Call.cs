@@ -1,6 +1,10 @@
 ﻿using System;
 using Android.Content;
 using TestDroid.Logic.Controller;
+using Android.Net;
+using Android.Telephony;
+using Android.Widget;
+using Android.Provider;
 
 namespace TestDroid
 {
@@ -9,6 +13,7 @@ namespace TestDroid
 		string phonenumber;
 		Context context;
 		Logger logger;
+//		CellSignalStrength signal;
 
 		public Call(Context context)
 		{
@@ -31,6 +36,13 @@ namespace TestDroid
 			string url = "tel:" + phonenumber;
 			try
 			{
+				if (IsFlightmodeOn())
+				{
+					didSucceed = false;
+					logger.LogEvent("Call did not succeed, flightmode on", 2);
+					return didSucceed;
+				}
+
                 logger.LogEvent("Calling: " + phonenumber, 0);
                 //Intent is android specific. Gives ActionCall as option and takes phonenumber through 2. arg
                 Intent intent = new Intent(Intent.ActionCall, Android.Net.Uri.Parse(url));
@@ -46,6 +58,14 @@ namespace TestDroid
 				didSucceed = false;
 			}
 			return didSucceed;
+		}
+
+
+		public bool IsFlightmodeOn()
+		{
+			bool boolFlightmode = Settings.System.GetInt(context.ContentResolver, Settings.Global.AirplaneModeOn, 0) != 0;
+			return boolFlightmode;
+
 		}
 	}
 }
