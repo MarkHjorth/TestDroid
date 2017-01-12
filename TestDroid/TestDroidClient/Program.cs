@@ -14,8 +14,9 @@ namespace TestDroidClient
             {
                 while(input != "exit")
                 {
-                    input = Console.ReadLine();
-                    inputArgs = input.Split(' ');
+                    string input = Console.ReadLine();
+                    string lowerInput = input.ToLower();
+                    string[] inputArgs = lowerInput.Split(' ');
                     ctrl.ParseCommand(inputArgs);
                 } 
             }

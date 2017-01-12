@@ -42,7 +42,7 @@ namespace TestDroidClient
 
             switch (command)
 			{
-				case "sendSMS"://Other cases here
+				case "sendsms"://Other cases here
                     tcpConnection = TCPConnection.GetInstance();
                     tcpConnection.Stop = stopConnection;
                     tcpConnection.SendCommand(id, fullCommand);
@@ -55,7 +55,7 @@ namespace TestDroidClient
                     tcpConnection.Stop = stopConnection;
                     call.HandleCall(args, id);
 					break;
-                case "installApk":
+                case "installapk":
                     apk.InstallApk();
 				    break;
 				default:

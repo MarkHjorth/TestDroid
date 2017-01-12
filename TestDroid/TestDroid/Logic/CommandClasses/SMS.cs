@@ -6,6 +6,7 @@ using Android.Content;
 using TestDroid.Logic.Controller;
 using System.Threading;
 using System.Threading.Tasks;
+using Android.Widget;
 
 namespace TestDroid
 {
