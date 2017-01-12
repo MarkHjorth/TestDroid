@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Threading;
 
 namespace TestDroidClient
 {
@@ -8,20 +9,22 @@ namespace TestDroidClient
 	public class Call
 	{
 
-		/// <summary>
-		/// Handles the call command.
-		/// </summary>
-		/// <returns><c>true</c>, if call succeded, <c>false</c> otherwise.</returns>
-		/// <param name="args">Arguments to handle call. Answer for answering call, dial to make call, or help for help.</param>
-		public bool HandleCall(string[] args, int id)
+        ADBhandler adb = new ADBhandler();
+
+        /// <summary>
+        /// Handles the call command.
+        /// </summary>
+        /// <returns><c>true</c>, if call succeded, <c>false</c> otherwise.</returns>
+        /// <param name="args">Arguments to handle call. Answer for answering call, dial to make call, or help for help.</param>
+        public bool HandleCall(string[] args)
 		{
 			bool didSucceed = false;
 
 
 			switch (args.Length)
 			{
-				// If one argument is sent:
-				case 2:
+				// If one or two arguments are sent:
+                case 2:
                 case 3:
 					{
 						didSucceed = HandleCallAction(args, id);
@@ -58,23 +61,29 @@ namespace TestDroidClient
 
 			switch (args[1])
 			{
-				// If argument is help, it answers with usage possible inputs
+				// If argument is help, we should answer with usage information
 				case "help":
 					{
-						Console.WriteLine("Call usage: call [answer | dial]");
+						Console.WriteLine("Call usage: call <answer | dial [phone number]>");
 						didSucceed = false;
 						break;
 					}
-				// If argument is answer, user will answer a phone call
+				// If argument is answer, we want to answer a phone call
 				case "answer":
 					{
 						didSucceed = CallAnswer();
 						break;
 					}
-				// If argument is dial, user will make a phone call
+				// If argument is end, we want to end a phone call
+				case "end":
+					{
+						didSucceed = CallEnd();
+						break;
+					}
+				// If argument is dial, we want to make a phone call
 				case "dial":
 					{
-						didSucceed = CallDial(args, id);
+						didSucceed = CallDial(args);
 						break;
 					}
 				// If the argument was not recognized, give an errormessage:
@@ -102,8 +111,6 @@ namespace TestDroidClient
 			string answerPhoneCallCommand;
 			string getPhoneCallStatusCommand;
 			string stringSucceed;
-			ADBhandler adb = new ADBhandler();
-
 
 			answerPhoneCallCommand = "-d shell service call phone 6";
 			getPhoneCallStatusCommand = "-d shell dumpsys telephony.registry | grep \"mCallState\"";
@@ -112,7 +119,7 @@ namespace TestDroidClient
 			adb.StartProcess(answerPhoneCallCommand, false, 2500);
 
 			Console.WriteLine("Checking if call was answered...");
-			output = adb.StartProcess(getPhoneCallStatusCommand);
+			output = adb.StartProcess(getPhoneCallStatusCommand, timeout: 2000);
 
 			// When a call is active, the getPhoneCallStatusCommand will return: "mCallState=2"
 			didSucceed = output.Contains("2");
@@ -125,12 +132,46 @@ namespace TestDroidClient
 		}
 
 		/// <summary>
+		/// Method to end an active call
+		/// </summary>
+		/// <returns><c>true</c>, if call was answered, <c>false</c> otherwise.</returns>
+		private bool CallEnd()
+		{
+			bool didSucceed = false;
+			string output;
+			string endPhoneCallCommand;
+			string getPhoneCallStatusCommand;
+			string stringSucceed;
+
+			endPhoneCallCommand = "-d shell input keyevent KEYCODE_ENDCALL";
+			getPhoneCallStatusCommand = "-d shell dumpsys telephony.registry | grep \"mCallState\"";
+
+			Console.WriteLine("Ending call...");
+			adb.startProcess(endPhoneCallCommand, false, 2500);
+
+			Thread.Sleep(2500);
+
+			Console.WriteLine("Checking if call was ended...");
+			output = adb.startProcess(getPhoneCallStatusCommand);
+
+			// When a call is not active, the getPhoneCallStatusCommand will return: "mCallState=0"
+			didSucceed = output.Contains("0");
+
+			Console.WriteLine(output);
+
+			stringSucceed = (didSucceed) ? "succeded" : "failed";
+
+			Console.WriteLine("Call end " + stringSucceed + ".");
+
+			return didSucceed;
+		}
+
+		/// <summary>
 		/// Method to make a new call
 		/// </summary>
 		/// <returns><c>true</c>, if call was successfull, <c>false</c> otherwise.</returns>
 		/// <param name="args">Arguments.</param>
-
-		private bool CallDial(string[] args, int id)
+		private bool CallDial(string[] args)
 		{
 			bool didSucceed = false;
 			string fullCommand = (id + " " + string.Join(" ", args));

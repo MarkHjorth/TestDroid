@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace TestDroidClient
 {
@@ -7,15 +7,19 @@ namespace TestDroidClient
 		public static void Main(string[] args)
 		{
 			Controller ctrl = new Controller(args);
+            string input = "";
+            string[] inputArgs;
 
             if (!(args.Length >= 1))
             {
-                do
+                while(input != "exit")
                 {
-                    string[] inputArgs = Console.ReadLine().Split(' ');
+                    input = Console.ReadLine();
+                    inputArgs = input.Split(' ');
                     ctrl.ParseCommand(inputArgs);
-                } while (true);
+                } 
             }
+            return;
         }
 	}
 }
