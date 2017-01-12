@@ -33,7 +33,7 @@ namespace TestDroidClient
 		/// <param name="arguments">ADB commandline arguments.</param>
 		/// <param name="verbose">If set to <c>true</c> verbose.</param>
 		/// <param name="timeout">Command timeout in miliseconds.</param>
-		public string startProcess(string arguments, bool verbose = false, int timeout = 30000)
+		public string StartProcess(string arguments, bool verbose = false, int timeout = 30000)
 		{
 			ProcessStartInfo processStartInfo = new ProcessStartInfo(path, arguments);
 			Process process = new Process();

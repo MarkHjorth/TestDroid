@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
@@ -18,7 +18,7 @@ namespace TestDroidClient
 		private BinaryReader reader;
 		private TcpClient client;
         private ADBhandler adb;
-        Dictionary<long, CommandClass> commandArray = new Dictionary<long, CommandClass>();
+        Dictionary<int, CommandClass> commandArray = new Dictionary<int, CommandClass>();
 
         public bool GotIO { get; set; }
         public bool Stop { get; set; }
@@ -67,7 +67,7 @@ namespace TestDroidClient
             try
             {
                 string parameters = string.Format("-d forward tcp:{0} tcp:{1}", remotePort, localPort);
-                adb.startProcess(parameters);
+                adb.StartProcess(parameters);
             }
 			catch(Exception e)
             {
@@ -126,14 +126,14 @@ namespace TestDroidClient
                     string[] messageArgs = message.Split(' ');
                     try
                     {
-                        long id = long.Parse(messageArgs[0]);
+                        int id = int.Parse(messageArgs[0]);
 
                         CommandClass cmd = commandArray[id];
 
                         string command = cmd.Command.Split(' ')[1];
                         worked = messageArgs[1].ToLower();
                         worked = (worked == "true") ? "Success" : "Failed";
-                        string result = string.Format("{0}: {1}", command, worked);
+                        string result = string.Format("Command: {0} {1}: {2}", id, command, worked);
 
                         Console.WriteLine(result);
                     }
@@ -181,7 +181,7 @@ namespace TestDroidClient
         /// </summary>
         /// <param name="command">The command to send to the server</param>
         /// <returns>True if command sent; False if command NOT sent</returns>
-		public async Task<bool> SendCommand(long id, string command)
+		public async Task<bool> SendCommand(int id, string command)
 		{
             bool connectionOpen = false;
             // Waits for the esrver to be ready to recieve command

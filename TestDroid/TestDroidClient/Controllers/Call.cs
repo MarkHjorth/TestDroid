@@ -13,7 +13,7 @@ namespace TestDroidClient
 		/// </summary>
 		/// <returns><c>true</c>, if call succeded, <c>false</c> otherwise.</returns>
 		/// <param name="args">Arguments to handle call. Answer for answering call, dial to make call, or help for help.</param>
-		public bool HandleCall(string[] args)
+		public bool HandleCall(string[] args, int id)
 		{
 			bool didSucceed = false;
 
@@ -22,8 +22,9 @@ namespace TestDroidClient
 			{
 				// If one argument is sent:
 				case 2:
+                case 3:
 					{
-						didSucceed = HandleCallAction(args);
+						didSucceed = HandleCallAction(args, id);
 						break;
 					}
 				// If an unexspected amount of arguments were send, give an error:
@@ -51,29 +52,29 @@ namespace TestDroidClient
 		/// </summary>
 		/// <returns><c>true</c>, if call action was handled, <c>false</c> otherwise.</returns>
 		/// <param name="args">Checks to see what to do. answer, dial or display help.</param>
-		private bool HandleCallAction(string[] args)
+		private bool HandleCallAction(string[] args, int id)
 		{
 			bool didSucceed = false;
 
 			switch (args[1])
 			{
-				// If argument is help, we should answer with usage information
+				// If argument is help, it answers with usage possible inputs
 				case "help":
 					{
 						Console.WriteLine("Call usage: call [answer | dial]");
 						didSucceed = false;
 						break;
 					}
-				// If argument is answer, we want to answer a phone call
+				// If argument is answer, user will answer a phone call
 				case "answer":
 					{
 						didSucceed = CallAnswer();
 						break;
 					}
-				// If argument is dial, we want to make a phone call
+				// If argument is dial, user will make a phone call
 				case "dial":
 					{
-						didSucceed = CallDial(args);
+						didSucceed = CallDial(args, id);
 						break;
 					}
 				// If the argument was not recognized, give an errormessage:
@@ -108,10 +109,10 @@ namespace TestDroidClient
 			getPhoneCallStatusCommand = "-d shell dumpsys telephony.registry | grep \"mCallState\"";
 
 			Console.WriteLine("Answering call...");
-			adb.startProcess(answerPhoneCallCommand, false, 2500);
+			adb.StartProcess(answerPhoneCallCommand, false, 2500);
 
 			Console.WriteLine("Checking if call was answered...");
-			output = adb.startProcess(getPhoneCallStatusCommand);
+			output = adb.StartProcess(getPhoneCallStatusCommand);
 
 			// When a call is active, the getPhoneCallStatusCommand will return: "mCallState=2"
 			didSucceed = output.Contains("2");
@@ -128,13 +129,13 @@ namespace TestDroidClient
 		/// </summary>
 		/// <returns><c>true</c>, if call was successfull, <c>false</c> otherwise.</returns>
 		/// <param name="args">Arguments.</param>
-		private bool CallDial(string[] args)
+
+		private bool CallDial(string[] args, int id)
 		{
 			bool didSucceed = false;
-
-			//TODO
-			throw new NotImplementedException("Dial is not yet implemented");
-
+			string fullCommand = (id + " " + string.Join(" ", args));
+			TCPConnection connection = TCPConnection.GetInstance();
+			didSucceed = connection.SendCommand(id, fullCommand);
 			return didSucceed;
 		}
 	}

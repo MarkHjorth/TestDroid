@@ -1,4 +1,4 @@
-﻿using Android.App;
+using Android.App;
 using Android.Widget;
 using Android.OS;
 using System.Threading;
@@ -16,14 +16,16 @@ namespace TestDroid
         ArrayAdapter<string> arrayAdapter;
         List<string> logs;
         Logger logger;
-
-        Context context;
+		Context context;
+		Button button_makeCall;
+		ButtonHandlers buttonHandler;
 
         protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
-            // Set our view from the "main" layout resource
-            SetContentView(Resource.Layout.Main);
+			context = this;
+			// Set our view from the "main" layout resource
+			SetContentView(Resource.Layout.Main);
 
 			FindViews();
 			AddHandlers();
@@ -35,18 +37,21 @@ namespace TestDroid
 
 		private void FindViews()
 		{
-            logList = FindViewById<ListView>(Resource.Id.logList);
-            logs = new List<string>();
-            logs.Add("EVENTS:");
-            arrayAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, logs);
-            logList.Adapter = arrayAdapter;
-            logger = Logger.GetInstance(arrayAdapter);
+			logList = FindViewById<ListView>(Resource.Id.logList);
+			logs = new List<string>();
+			logs.Add("EVENTS:");
+			arrayAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, logs);
+			logList.Adapter = arrayAdapter;
+			logger = Logger.GetInstance(arrayAdapter);
 
-            context = Application.Context;
+			buttonHandler = new ButtonHandlers(context);
+			button_makeCall = FindViewById<Button>(Resource.Id.button_makeCall); 
         }
+
 
 		private void AddHandlers()
 		{
+			button_makeCall.Click += buttonHandler.ButtonMakeCallHandler;
 		}
 
 		private void StartServer()

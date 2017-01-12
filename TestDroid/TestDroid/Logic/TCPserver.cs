@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.Sockets;
 using System.IO;
 using System.Net;
@@ -62,6 +62,7 @@ namespace TestDroid
 
 		private void ServerClientInteraction()
 		{
+            //writer.Write("Connection established!");
             logger.LogEvent("Client connected!");
 
             string fullCommand = "";

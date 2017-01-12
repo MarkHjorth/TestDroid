@@ -11,11 +11,13 @@ namespace TestDroid
 		private SMS sms;
         Context context;
         Logger logger;
+		Call call;
 
-		public Controller(Context cont)
+		public Controller(Context context)
 		{
-            context = cont;
+            this.context = context;
             logger = Logger.GetInstance();
+			call = new Call(context);
 		}
 
         /// <summary>
@@ -29,6 +31,13 @@ namespace TestDroid
             sms = SMS.GetInstance(context);
             Task<bool> senderTask = sms.SendSMS(args);
             return await senderTask;
+		}
+
+		public bool MakeCall(string[] args)
+		{
+			bool didSucceed = false;
+			didSucceed = call.MakeCall(args);
+			return didSucceed;
 		}
 	}
 }

@@ -87,8 +87,8 @@ namespace TestDroidClient
 			string broadcast = "-d shell am broadcast -a android.intent.action.AIRPLANE_MODE";
 
 			// First change flightmode and then tell phone that we changed it.
-			adb.startProcess(flightmode);
-			output = adb.startProcess(broadcast);
+			adb.StartProcess(flightmode);
+			output = adb.StartProcess(broadcast);
 
 
 			// Take output from the last command, and split at '=' (output will end with result=0 if it worked)
@@ -119,7 +119,7 @@ namespace TestDroidClient
 
 			// Set ADB arguments to check flightmode status and execute it:
 			string checkAirplanemode = "-d shell settings get global airplane_mode_on";
-			output = adb.startProcess(checkAirplanemode);
+			output = adb.StartProcess(checkAirplanemode);
 
 			// Parse the string output to an int (1/0)
 			try

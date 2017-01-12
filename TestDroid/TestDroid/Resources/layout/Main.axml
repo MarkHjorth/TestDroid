@@ -5,6 +5,12 @@
     android:layout_height="match_parent"
     android:minWidth="25px"
     android:minHeight="25px">
+    <Button
+        android:text="Foretag opkald"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:id="@+id/button_makeCall"
+        android:textSize="14dp" />
     <ListView
         android:minWidth="25px"
         android:minHeight="25px"

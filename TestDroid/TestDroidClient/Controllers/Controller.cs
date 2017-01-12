@@ -37,10 +37,10 @@ namespace TestDroidClient
 		public void ParseCommand(string[] args)
 		{
             string command = args[0];
-            long id = GenerateId();
+            int id = (int) GenerateId();
             string fullCommand = (id + " " + string.Join(" ", args));
 
-			switch (command)
+            switch (command)
 			{
 				case "sendSMS"://Other cases here
                     tcpConnection = TCPConnection.GetInstance();
@@ -51,7 +51,9 @@ namespace TestDroidClient
 					flightmode.HandleFlightmode(args);
                     break;
 				case "call":
-					call.HandleCall(args);
+                    tcpConnection = TCPConnection.GetInstance();
+                    tcpConnection.Stop = stopConnection;
+                    call.HandleCall(args, id);
 					break;
                 case "installApk":
                     apk.InstallApk();
