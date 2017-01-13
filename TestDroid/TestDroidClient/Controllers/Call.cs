@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace TestDroidClient
 {
@@ -16,10 +17,9 @@ namespace TestDroidClient
         /// </summary>
         /// <returns><c>true</c>, if call succeded, <c>false</c> otherwise.</returns>
         /// <param name="args">Arguments to handle call. Answer for answering call, dial to make call, or help for help.</param>
-        public bool HandleCall(string[] args)
+        public async Task<bool> HandleCall(string[] args, int id)
 		{
 			bool didSucceed = false;
-
 
 			switch (args.Length)
 			{
@@ -27,7 +27,7 @@ namespace TestDroidClient
                 case 2:
                 case 3:
 					{
-						didSucceed = HandleCallAction(args, id);
+						didSucceed = await HandleCallAction(args, id);
 						break;
 					}
 				// If an unexspected amount of arguments were send, give an error:
@@ -55,7 +55,7 @@ namespace TestDroidClient
 		/// </summary>
 		/// <returns><c>true</c>, if call action was handled, <c>false</c> otherwise.</returns>
 		/// <param name="args">Checks to see what to do. answer, dial or display help.</param>
-		private bool HandleCallAction(string[] args, int id)
+		private async Task<bool> HandleCallAction(string[] args, int id)
 		{
 			bool didSucceed = false;
 
@@ -83,7 +83,7 @@ namespace TestDroidClient
 				// If argument is dial, we want to make a phone call
 				case "dial":
 					{
-						didSucceed = CallDial(args);
+						didSucceed = await CallDial(args, id);
 						break;
 					}
 				// If the argument was not recognized, give an errormessage:
@@ -147,12 +147,12 @@ namespace TestDroidClient
 			getPhoneCallStatusCommand = "-d shell dumpsys telephony.registry | grep \"mCallState\"";
 
 			Console.WriteLine("Ending call...");
-			adb.startProcess(endPhoneCallCommand, false, 2500);
+			adb.StartProcess(endPhoneCallCommand, false, 2500);
 
 			Thread.Sleep(2500);
 
 			Console.WriteLine("Checking if call was ended...");
-			output = adb.startProcess(getPhoneCallStatusCommand);
+			output = adb.StartProcess(getPhoneCallStatusCommand);
 
 			// When a call is not active, the getPhoneCallStatusCommand will return: "mCallState=0"
 			didSucceed = output.Contains("0");
@@ -171,12 +171,12 @@ namespace TestDroidClient
 		/// </summary>
 		/// <returns><c>true</c>, if call was successfull, <c>false</c> otherwise.</returns>
 		/// <param name="args">Arguments.</param>
-		private bool CallDial(string[] args)
+		private async Task<bool> CallDial(string[] args, int id)
 		{
-			bool didSucceed = false;
-			string fullCommand = (id + " " + string.Join(" ", args));
+            bool didSucceed = false;
+            string fullCommand = (id + " " + string.Join(" ", args));
 			TCPConnection connection = TCPConnection.GetInstance();
-			didSucceed = connection.SendCommand(id, fullCommand);
+            didSucceed = await connection.SendCommand(id, fullCommand);
 			return didSucceed;
 		}
 	}
