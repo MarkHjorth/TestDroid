@@ -18,6 +18,7 @@ namespace TestDroid
         Logger logger;
 		Context context;
 		Button button_makeCall;
+		Button button_sendSms;
 		ButtonHandlers buttonHandler;
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -45,13 +46,15 @@ namespace TestDroid
 			logger = Logger.GetInstance(arrayAdapter);
 
 			buttonHandler = new ButtonHandlers(context);
-			button_makeCall = FindViewById<Button>(Resource.Id.button_makeCall); 
-        }
+			button_makeCall = FindViewById<Button>(Resource.Id.button_makeCall);
+			button_sendSms = FindViewById<Button>(Resource.Id.button_sendSms);
+		}
 
 
 		private void AddHandlers()
 		{
 			button_makeCall.Click += buttonHandler.ButtonMakeCallHandler;
+			button_sendSms.Click += buttonHandler.ButtonSendSmsHandler;
 		}
 
 		private void StartServer()

@@ -51,34 +51,36 @@ namespace TestDroid
 		public async Task<bool> SendSMS(string[] args)
 		{
             bool textSent = false;
-            string text = "This text is sent by the TesDroid Application";
+            string text = "This text is sent by the TestDroid Application";
             string phoneNumber = "71840913";
 
-            switch (args.Length)
-            {
-                case 2:
-                    break;
-                case 3:
-                    text = args[2];
-                    break;
-                case 4:
-                    text = args[2];
-                    phoneNumber = args[3];
-                    break;
-                default:
-                    try
-                    {
-                        text = args[2];
-                        phoneNumber = args[3];
-                    }
-                    catch (Exception e)
-                    {
-                        logger.LogEvent(e.Message, 3);
-                        throw;
-                    }
-                    break;
-            }
-
+			if (args != null)
+			{
+				switch (args.Length)
+				{
+					case 2:
+						break;
+					case 3:
+						text = args[2];
+						break;
+					case 4:
+						text = args[2];
+						phoneNumber = args[3];
+						break;
+					default:
+						try
+						{
+							text = args[2];
+							phoneNumber = args[3];
+						}
+						catch (Exception e)
+						{
+							logger.LogEvent(e.Message, 3);
+							throw;
+						}
+						break;
+				}
+			}
             CancellationToken cancle = new CancellationTokenSource(2500).Token;
 
             Task<bool> checkIfSent = Task.Run(() => CountSms(cancle));
