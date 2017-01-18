@@ -184,9 +184,9 @@ namespace TestDroidClient
 		public async Task<bool> SendCommand(int id, string command)
 		{
             bool connectionOpen = false;
+
             // Waits for the esrver to be ready to recieve command
             CancellationToken cancle = new CancellationTokenSource(2500).Token;
-
             Task<bool> waitForWriter = Task.Run(() => WaitForWriter(cancle));
             connectionOpen = await waitForWriter;
 

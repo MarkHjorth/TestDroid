@@ -107,7 +107,7 @@ namespace TestDroid
 
                 switch (command)
                 {
-                    case "sendsms":
+                    case "sms":
                         commandTask = controller.SendSMS(args);
                         success = await commandTask;
                         break;
@@ -129,6 +129,11 @@ namespace TestDroid
             }
         }
 
+        /// <summary>
+        /// Send the response of a command to the server
+        /// </summary>
+        /// <param name="id">The id of the command to respond to</param>
+        /// <param name="success">Indication if the command succeeded</param>
         private void Respond(string id, bool success)
         {
             string response = string.Format("{0} {1}", id, success);

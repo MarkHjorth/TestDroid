@@ -58,20 +58,20 @@ namespace TestDroid
 			{
 				switch (args.Length)
 				{
-					case 2:
-						break;
 					case 3:
-						text = args[2];
 						break;
 					case 4:
-						text = args[2];
-						phoneNumber = args[3];
+						text = args[3];
+						break;
+					case 5:
+						text = args[3];
+						phoneNumber = args[4];
 						break;
 					default:
 						try
 						{
-							text = args[2];
-							phoneNumber = args[3];
+							text = args[3];
+							phoneNumber = args[4];
 						}
 						catch (Exception e)
 						{

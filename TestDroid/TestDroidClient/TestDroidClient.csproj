@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\ApkInstaller.cs" />
+    <Compile Include="Controllers\Sms.cs" />
     <Compile Include="Models\CommandClass.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

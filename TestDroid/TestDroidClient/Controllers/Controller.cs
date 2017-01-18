@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TestDroidClient.Controllers;
 using TestDroidClient.Models;
 
 namespace TestDroidClient
@@ -9,17 +10,17 @@ namespace TestDroidClient
 		TCPConnection tcpConnection;
 		private Flightmode flightmode;
 		private Call call;
+        private Sms sms;
         private ApkInstaller apk;
         private bool stopConnection = false;
-
         
-
         public Controller(string[] args)
 		{
             try
             {
 				flightmode = new Flightmode();
 				call = new Call();
+                sms = new Sms();
                 apk = new ApkInstaller();
 
                 if (args.Length >= 1)
@@ -34,6 +35,10 @@ namespace TestDroidClient
             }
 		}
 
+        /// <summary>
+        /// Parses the command on to the correct subcontroller
+        /// </summary>
+        /// <param name="args">Command as string array</param>
 		public void ParseCommand(string[] args)
 		{
             string command = args[0];
@@ -42,11 +47,11 @@ namespace TestDroidClient
 
             switch (command)
 			{
-				case "sendsms"://Other cases here
+				case "sms"://Other cases here
                     tcpConnection = TCPConnection.GetInstance();
                     tcpConnection.Stop = stopConnection;
-                    tcpConnection.SendCommand(id, fullCommand);
-					break;
+                    sms.HandleSms(id, args);
+                    break;
 				case "flightmode":
 					flightmode.HandleFlightmode(args);
                     break;
@@ -64,6 +69,10 @@ namespace TestDroidClient
 			}
 		}
 
+        /// <summary>
+        /// Generates a unique ID for the command
+        /// </summary>
+        /// <returns>long ID</returns>
         private long GenerateId()
         {
             long id = DateTime.Now.Ticks;
