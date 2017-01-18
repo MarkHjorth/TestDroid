@@ -39,9 +39,10 @@ namespace TestDroidClient
         /// Parses the command on to the correct subcontroller
         /// </summary>
         /// <param name="args">Command as string array</param>
-		public void ParseCommand(string[] args)
+		public bool ParseCommand(string[] args)
 		{
-            string command = args[0];
+			bool didSucceed = false;
+			string command = args[0];
             int id = (int) GenerateId();
             string fullCommand = (id + " " + string.Join(" ", args));
 
@@ -50,23 +51,25 @@ namespace TestDroidClient
 				case "sms"://Other cases here
                     tcpConnection = TCPConnection.GetInstance();
                     tcpConnection.Stop = stopConnection;
-                    sms.HandleSms(id, args);
+					didSucceed = sms.HandleSms(id, args).Wait(3000);
                     break;
 				case "flightmode":
-					flightmode.HandleFlightmode(args);
+					didSucceed = flightmode.HandleFlightmode(args);
                     break;
 				case "call":
                     tcpConnection = TCPConnection.GetInstance();
                     tcpConnection.Stop = stopConnection;
-                    call.HandleCall(args, id);
+                    didSucceed = call.HandleCall(args, id).Wait(3000);
 					break;
                 case "installapk":
-                    apk.InstallApk();
+                    didSucceed = apk.InstallApk();
 				    break;
 				default:
 					Console.WriteLine("Command not found!");
 					break;
 			}
+
+			return didSucceed;
 		}
 
         /// <summary>
