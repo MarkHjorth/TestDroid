@@ -55,6 +55,7 @@
     <Compile Include="Logic\CommandClasses\SMS.cs" />
     <Compile Include="Logic\Controller\ButtonHandlers.cs" />
     <Compile Include="Logic\CommandClasses\Call.cs" />
+    <Compile Include="Logic\Controller\BootReceiver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
