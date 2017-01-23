@@ -10,6 +10,7 @@ namespace TestDroidClient
 		TCPConnection tcpConnection;
 		private Flightmode flightmode;
 		private Call call;
+		private Power power;
         private Sms sms;
         private ApkInstaller apk;
         private bool stopConnection = false;
@@ -20,6 +21,7 @@ namespace TestDroidClient
             {
 				flightmode = new Flightmode();
 				call = new Call();
+				power = new Power();
                 sms = new Sms();
                 apk = new ApkInstaller();
 
@@ -60,6 +62,11 @@ namespace TestDroidClient
                     tcpConnection = TCPConnection.GetInstance();
                     tcpConnection.Stop = stopConnection;
                     didSucceed = call.HandleCall(args, id).Wait(3000);
+					break;
+				case "power":
+					tcpConnection = TCPConnection.GetInstance();
+					tcpConnection.Stop = stopConnection;
+					didSucceed = power.HandlePower(args, id).Wait(3000);
 					break;
                 case "installapk":
                     didSucceed = apk.InstallApk();
