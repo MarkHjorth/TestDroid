@@ -51,36 +51,41 @@ namespace TestDroid
 		public async Task<bool> SendSMS(string[] args)
 		{
             bool textSent = false;
+            object obj = new object();
             string text = "This text is sent by the TestDroid Application";
             string phoneNumber = "71840913";
 
-			if (args != null)
-			{
-				switch (args.Length)
-				{
-					case 3:
-						break;
-					case 4:
-						text = args[3];
-						break;
-					case 5:
-						text = args[3];
-						phoneNumber = args[4];
-						break;
-					default:
-						try
-						{
-							text = args[3];
-							phoneNumber = args[4];
-						}
-						catch (Exception e)
-						{
-							logger.LogEvent(e.Message, 3);
-							throw;
-						}
-						break;
-				}
-			}
+            lock (obj)
+            {
+                if (args != null)
+                {
+                    switch (args.Length)
+                    {
+                        case 3:
+                            break;
+                        case 4:
+                            text = args[3];
+                            break;
+                        case 5:
+                            text = args[3];
+                            phoneNumber = args[4];
+                            break;
+                        default:
+                            try
+                            {
+                                text = args[3];
+                                phoneNumber = args[4];
+                            }
+                            catch (Exception e)
+                            {
+                                logger.LogEvent(e.Message, 3);
+                                throw;
+                            }
+                            break;
+                    }
+                }
+            }
+
             CancellationToken cancle = new CancellationTokenSource(2500).Token;
 
             Task<bool> checkIfSent = Task.Run(() => CountSms(cancle));
@@ -103,29 +108,34 @@ namespace TestDroid
         
         private async Task<bool> CountSms(CancellationToken cancle)
         {
-            bool textSent = false;
-            uri = Telephony.Sms.Sent.ContentUri;
-            cursor = context.ContentResolver.Query(uri, null, "read = 1", null, null);
+            object obj = new object();
 
-            int before = cursor.Count;
-            int after = cursor.Count;
-
-            while (before == after)
+            lock (obj)
             {
+                bool textSent = false;
+                uri = Telephony.Sms.Sent.ContentUri;
                 cursor = context.ContentResolver.Query(uri, null, "read = 1", null, null);
-                after = cursor.Count;
-                if(cancle.IsCancellationRequested)
+
+                int before = cursor.Count;
+                int after = cursor.Count;
+
+                while (before == after)
                 {
-                    logger.LogEvent("Text not sent. Timeout", 2);
-                    return textSent;
+                    cursor = context.ContentResolver.Query(uri, null, "read = 1", null, null);
+                    after = cursor.Count;
+                    if (cancle.IsCancellationRequested)
+                    {
+                        logger.LogEvent("Text not sent. Timeout", 2);
+                        return textSent;
+                    }
                 }
+                if (before != after)
+                {
+                    logger.LogEvent("Text sent!");
+                    textSent = true;
+                }
+                return textSent;
             }
-            if (before != after)
-            {
-                logger.LogEvent("Text sent!");
-                textSent = true;
-            }
-            return textSent;
         }
     }
 }

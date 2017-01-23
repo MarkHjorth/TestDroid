@@ -50,36 +50,44 @@ namespace TestDroid.Logic.Controller
         /// </param>
         public void LogEvent(string logEvent, int level = 0)
         {
-            string logLevel = "";
-
-            switch (level)
+            object obj = new object();
+            lock(obj)
             {
-                case 0: logLevel = "[Info]";
-                    break;
-                case 1: logLevel = "[Debug]";
-                    break;
-                case 2: logLevel = "[Warning]";
-                    break;
-                case 3: logLevel = "[Error]";
-                    break;
-                case 4: logLevel = "[FATAL]";
-                    break;
-                default:
-                    break;
-            }
-            logLevel += ": ";
+                string logLevel = "";
 
-            string timestamp = "[" + DateTime.Now.ToShortTimeString() + "] ";
-            
-            string logMessage = timestamp + logLevel + logEvent;
+                switch (level)
+                {
+                    case 0:
+                        logLevel = "[Info]";
+                        break;
+                    case 1:
+                        logLevel = "[Debug]";
+                        break;
+                    case 2:
+                        logLevel = "[Warning]";
+                        break;
+                    case 3:
+                        logLevel = "[Error]";
+                        break;
+                    case 4:
+                        logLevel = "[FATAL]";
+                        break;
+                    default:
+                        break;
+                }
 
-            try
-            {
-                RunOnUiThread(() => logAdapter.Add(logMessage));
-            }
-            catch (Exception)
-            {
-                
+                string timestamp = DateTime.Now.ToShortTimeString();
+
+                string logMessage = string.Format("[{0} {1}: {2}", timestamp, logLevel, logEvent);
+
+                try
+                {
+                    RunOnUiThread(() => logAdapter.Add(logMessage));
+                }
+                catch (Exception)
+                {
+
+                }
             }
         }
     }

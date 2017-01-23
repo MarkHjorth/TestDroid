@@ -110,7 +110,7 @@ namespace TestDroidClient
 				output = client.GetStream();
 				writer = new BinaryWriter(output);
 				reader = new BinaryReader(output);
-				Console.WriteLine("Got IO Streams");
+				Console.WriteLine("Got IO Streams: " + client);
                 GotIO = true;
 			}
 			catch(Exception e)

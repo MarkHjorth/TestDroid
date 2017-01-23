@@ -45,7 +45,6 @@ namespace TestDroidClient
 						break;
 					}
 			}
-
 			return didSucceed;
 		}
 
