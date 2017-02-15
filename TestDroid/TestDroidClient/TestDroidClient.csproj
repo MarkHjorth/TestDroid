@@ -48,6 +48,7 @@
     <Compile Include="ADB\ADBhandler.cs" />
     <Compile Include="Controllers\Call.cs" />
     <Compile Include="Controllers\Power.cs" />
+    <Compile Include="Controllers\Hello.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

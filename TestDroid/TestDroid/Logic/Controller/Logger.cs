@@ -39,7 +39,7 @@ namespace TestDroid.Logic.Controller
         /// <summary>
         /// Log an event to display on the screen. Includes timestamp and loglevel
         /// </summary>
-        /// <param name="data">The even to log</param>
+        /// <param name="logEvent">The event to log</param>
         /// <param name="level">
         /// The level of the log:
         /// 0: Info

@@ -107,6 +107,10 @@ namespace TestDroid
 
                 switch (command)
                 {
+					case "hello":
+						commandTask = controller.SayHello(args);
+						success = await commandTask;
+						break;
                     case "sms":
                         commandTask = controller.SendSMS(args);
                         success = await commandTask;

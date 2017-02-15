@@ -13,6 +13,7 @@ namespace TestDroidClient
 		private Power power;
         private Sms sms;
         private ApkInstaller apk;
+		private Hello hello;
         private bool stopConnection = false;
         
         public Controller(string[] args)
@@ -24,6 +25,7 @@ namespace TestDroidClient
 				power = new Power();
                 sms = new Sms();
                 apk = new ApkInstaller();
+				hello = new Hello();
 
                 if (args.Length >= 1)
                 {
@@ -50,6 +52,11 @@ namespace TestDroidClient
 
             switch (command)
 			{
+				case "exit":
+					Console.WriteLine("Exiting...");
+					tcpConnection = TCPConnection.GetInstance();
+					tcpConnection.StopConnection();
+					break;
 				case "sms"://Other cases here
                     tcpConnection = TCPConnection.GetInstance();
                     tcpConnection.Stop = stopConnection;
@@ -62,6 +69,9 @@ namespace TestDroidClient
                     tcpConnection = TCPConnection.GetInstance();
                     tcpConnection.Stop = stopConnection;
                     didSucceed = call.HandleCall(args, id).Wait(3000);
+					break;
+				case "hello":
+					didSucceed = hello.HandleHello(id, args).Wait(2500);
 					break;
 				case "power":
 					tcpConnection = TCPConnection.GetInstance();

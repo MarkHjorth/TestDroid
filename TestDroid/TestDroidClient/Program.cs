@@ -13,13 +13,13 @@ namespace TestDroidClient
 
             if (!(args.Length >= 1))
             {
-                while(lowerInput != "exit")
-                {
-                    input = Console.ReadLine();
-                    lowerInput = input.ToLower();
-                    inputArgs = lowerInput.Split(' ');
-                    ctrl.ParseCommand(inputArgs);
-                } 
+				do
+				{
+					input = Console.ReadLine();
+					lowerInput = input.ToLower();
+					inputArgs = lowerInput.Split(' ');
+					ctrl.ParseCommand(inputArgs);
+				} while (lowerInput != "exit");
             }
             return;
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace TestDroidClient
@@ -88,6 +89,8 @@ namespace TestDroidClient
 			Console.WriteLine("Rebooting phone...");
 			adb.StartProcess(rebootCommand);
 
+
+
 			//TODO: Check if we actually rebooted
 
 			return didSucceed;
@@ -103,6 +106,8 @@ namespace TestDroidClient
 
 			Console.WriteLine("Turning off phone...");
 			adb.StartProcess(offCommand);
+
+			Thread.Sleep(5000);
 
 			//TODO: Check if phone is actually turned off
 

@@ -9,6 +9,7 @@ namespace TestDroid
 	public class Controller
 	{
 		private SMS sms;
+		private Hello hello;
         Context context;
         Logger logger;
 		Call call;
@@ -18,6 +19,13 @@ namespace TestDroid
             this.context = context;
             logger = Logger.GetInstance();
 			call = new Call(context);
+		}
+
+		public async Task<bool> SayHello(string[] args)
+		{
+			hello = Hello.GetInstance(context);
+			Task<bool> senderTask = hello.SayHello(args);
+			return await senderTask;
 		}
 
         /// <summary>

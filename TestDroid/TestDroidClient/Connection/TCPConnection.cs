@@ -156,24 +156,42 @@ namespace TestDroidClient
                 }
 				catch(Exception e)
 				{
-                    Console.WriteLine(e.StackTrace);
+					Console.WriteLine(e.StackTrace);
                     break;
 				}
 			}
 			while (message.ToLower() != "stop");
 
+			StopConnection();
+
+		}
+
+		/// <summary>
+		/// Stops the connection.
+		/// </summary>
+		public void StopConnection()
+		{
 			try
 			{
 				writer.Close();
 				reader.Close();
 				output.Close();
 				client.Close();
-                Environment.Exit(0);
+				Environment.Exit(0);
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				throw e;
 			}
+		}
+
+		public async Task<bool> SendCommand(int id, string[] args)
+		{
+			bool didSucceed;
+
+			string fullCommand = (id + " " + string.Join(" ", args));
+			didSucceed = await SendCommand(id, fullCommand);
+			return didSucceed;
 		}
 
         /// <summary>
